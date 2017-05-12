@@ -189,13 +189,13 @@ public Action CMD_Say(int client, const char[] command, int argc)
 public Action CS_OnTerminateRound(float& delay, CSRoundEndReason& reason)
 {
 
-    if (GameRules_GetProp("m_bWarmupPeriod") == 1)
-        return Plugin_Continue;
+    //if (GameRules_GetProp("m_bWarmupPeriod") == 1)
+    //    return Plugin_Continue;
         
-    if (reason == CSRoundEnd_GameStart)
-        return Plugin_Handled;
+    //if (reason == CSRoundEnd_GameStart)
+    //    return Plugin_Handled;
         
-    return Plugin_Continue;
+    //return Plugin_Continue;
 }
 
 public Action CMD_Spawn(int client, int args)
@@ -221,7 +221,10 @@ void hud_message(int client, char message[500])
 	
 	Format(message, sizeof(message), "%s\n%s", message, g_CustomRoundName[client]);
 	
- 	int ent = CreateEntityByName("game_text");
+	int ent = !IsValidEntity(iTextEntity[client]) ? CreateEntityByName("game_text") : iTextEntity[client];
+ 	
+ 	iTextEntity[client] = ent;
+ 	
 	DispatchKeyValue(ent, "channel", "1");
 	DispatchKeyValue(ent, "color", "255 255 255");
 	DispatchKeyValue(ent, "color2", "0 0 0");
@@ -235,16 +238,8 @@ void hud_message(int client, char message[500])
 	SetVariantString("!activator");
 	AcceptEntityInput(ent, "display", client); 
 	
-	CreateTimer(2.0, KillEntity, ent);
+	//CreateTimer(2.0, KillEntity, ent);
 }  
-
-
-public Action KillEntity(Handle tmr, any entity)
-{
-	if(entity > 0)
-		if(IsValidEntity(entity))
-			AcceptEntityInput(entity, "Kill");
-}
 
 public Action BlockKill(int client, const char[] command, int args)
 {

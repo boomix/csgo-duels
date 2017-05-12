@@ -9,6 +9,7 @@ public void OnPluginStartFunc()
 
 public void OnMapStart()
 {
+	g_RoundRestartDelayCvar = FindCvarAndLogError("mp_round_restart_delay");
 	WeaponMenu_MapStart();
 	Spawns_MapStart();
 	Cvars_MapStart();
@@ -136,7 +137,7 @@ public void OnGameFrame()
 		if(GetTotalRoundTime() == GetCurrentRoundTime())
 		{
 			b_NullOnce = false;
-			SetCvar("mp_timelimit", "0");
+			//SetCvar("mp_timelimit", "0");
 			SetCvar("mp_ignore_round_win_conditions", "0");
 			CreateTimer(1.0, EndRound, _, TIMER_FLAG_NO_MAPCHANGE);
 			
@@ -149,7 +150,8 @@ public void OnGameFrame()
 
 public Action EndRound(Handle tmr, any client)
 {
-	CS_TerminateRound(10.0, CSRoundEnd_Draw);
+	float delay = g_RoundRestartDelayCvar.FloatValue;
+	CS_TerminateRound(delay, CSRoundEnd_TerroristWin);
 }
 
 public Action ChangeMap(Handle tmr, any client)
@@ -171,4 +173,12 @@ public int GetCurrentRoundTime()
 	Handle h_freezeTime = FindConVar("mp_freezetime");
 	int freezeTime = GetConVarInt(h_freezeTime);
 	return (GetTime() - g_roundStartedTime) - freezeTime;
+}
+
+stock ConVar FindCvarAndLogError(const char[] name) {
+    ConVar c = FindConVar(name);
+    if (c == null) {
+        LogError("ConVar \"%s\" could not be found");
+    }
+    return c;
 }

@@ -23,6 +23,8 @@ ArrayList g_CTSpawnsList;
 ArrayList g_CTAnglesList;
 
 
+ConVar g_RoundRestartDelayCvar;
+
 //Arenas
 int g_maxArenas = 0;
 bool b_ArenaFree[32] = true;
@@ -60,6 +62,7 @@ bool b_HideMainWeaponMenu[MAXPLAYERS + 1];
 
 int i_DamageGiven[MAXPLAYERS + 1];
 
+int iTextEntity[MAXPLAYERS + 1];
 
 //Convars
 ConVar g_DamageGivenCvar;

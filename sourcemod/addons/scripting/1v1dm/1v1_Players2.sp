@@ -10,6 +10,7 @@ void Players_OnClientPutInServer(int client)
 	
 	//Arena thing settings
 	i_PrevArena[client] 		= -1;
+	iTextEntity[client] 		= -1;
 	
 	//LogMessage("%N is connecting to server", client);
 
@@ -32,12 +33,16 @@ void Players_OnClientDisconnect(int client)
 		//LogMessage("Kill %N damage tmr, because he disconnected!", client);
 		
 	}
+	
+	//
+	if(iTextEntity[client] && IsValidEntity(iTextEntity[client]) && iTextEntity[client] > 0)
+		AcceptEntityInput(iTextEntity[client], "Kill");
 		
 	//Print chat message
 	int opponent = i_PlayerEnemy[client];
 	if(opponent > 0)
 	{
-		if(IsClientInGame(opponent) && IsInRightTeam(opponent))
+		if(IsClientInGame(opponent) && IsInRightTeam(opponent) && i_PlayerEnemy[opponent] == client)
 		{
 			//PrintToChat(opponent, "%sSorry, your enemy left the game!", PREFIX);
 			
@@ -425,23 +430,8 @@ void SetupPlayer(int client, int opponent, int arena, int team, int giveWeapons 
 	
 	if(g_ShowUsernameCvar.IntValue == 1)
 	{
-		//Show username in top left corner
-		DataPack pack;
-		CreateDataTimer(0.1, DisplayUsername, pack);
-		pack.WriteCell(client);
-		pack.WriteCell(opponent);
-	}
-}
-
-public Action DisplayUsername(Handle timer, Handle pack)
-{
-	ResetPack(pack);
-	int client 	= ReadPackCell(pack);
-	int client2 = ReadPackCell(pack);
-	if(IsClientInGame(client) && IsClientInGame(client2))
-	{
 		char username[500];
-		GetClientName(client2, username, sizeof(username));
+		GetClientName(opponent, username, sizeof(username));
 		hud_message(client, username);
 	}
 }
@@ -493,7 +483,7 @@ public Action ArenaDamageTimer(Handle timer, any arena)
 			SearchTmr[player2] = CreateTimer(0.1, PlayerKilled, player2, TIMER_FLAG_NO_MAPCHANGE);
 	}
 	
-	b_ArenaFree[arena] = true;
+	//b_ArenaFree[arena] = true;
 }
 
 bool IsInRightTeam(int client)
