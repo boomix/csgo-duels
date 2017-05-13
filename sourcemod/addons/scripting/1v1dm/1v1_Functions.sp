@@ -15,6 +15,11 @@ public void OnMapStart()
 	Cvars_MapStart();
 }
 
+public void OnMapEnd()
+{
+	Spawns_MapEnd();
+}
+
 public void OnConfigsExecuted() 
 {
 	Cvars_OnConfigsExecuted();
@@ -24,6 +29,14 @@ public Action Event_RoundStart(Handle event, const char[] name, bool dontBroadca
 {
 	g_roundStartedTime = GetTime();
 	b_NullOnce = true;
+}
+
+public Action Event_OnRoundPostStart(Event event, const char[] name, bool dontBroadcast) 
+{
+	SetCvar("mp_autoteambalance",				"0"); 
+	SetCvar("mp_ignore_round_win_conditions", 	"1");
+	g_Timelimit = FindCvarAndLogError("mp_timelimit");
+	GameRules_SetProp("m_iRoundTime", g_Timelimit.IntValue * 60, 4, 0, true);	
 }
 
 public void OnClientPutInServer(int client)
@@ -137,12 +150,8 @@ public void OnGameFrame()
 		if(GetTotalRoundTime() == GetCurrentRoundTime())
 		{
 			b_NullOnce = false;
-			//SetCvar("mp_timelimit", "0");
 			SetCvar("mp_ignore_round_win_conditions", "0");
 			CreateTimer(1.0, EndRound, _, TIMER_FLAG_NO_MAPCHANGE);
-			
-			//We also want to fix shit workshop mapvote (maybe someone will not need this)
-			//CreateTimer(8.0, ChangeMap);
 			
 		}
 	}
@@ -152,14 +161,6 @@ public Action EndRound(Handle tmr, any client)
 {
 	float delay = g_RoundRestartDelayCvar.FloatValue;
 	CS_TerminateRound(delay, CSRoundEnd_TerroristWin);
-}
-
-public Action ChangeMap(Handle tmr, any client)
-{
-	char nextMap[100];
-	GetConVarString(FindConVar("sm_nextmap"), nextMap, sizeof(nextMap));
-	ServerCommand("map %s", nextMap);
-	//SetCvar("map", nextMap);
 }
 
 

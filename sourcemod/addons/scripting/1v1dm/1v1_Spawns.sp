@@ -314,3 +314,19 @@ int GetArenaSpawn(int arena, int team, float origin[3], float angle[3]) {
    
     return -1;
 }
+
+public void Spawns_MapEnd() {
+    CloseNestedList(g_TSpawnsList);
+    CloseNestedList(g_TAnglesList);
+    CloseNestedList(g_CTSpawnsList);
+    CloseNestedList(g_CTAnglesList);
+}
+
+void CloseNestedList(ArrayList list) {
+    int n = list.Length;
+    for (int i = 0; i < n; i++) {
+        ArrayList tmp = view_as<ArrayList>(list.Get(i));
+        delete tmp;
+    }
+    delete list;
+}

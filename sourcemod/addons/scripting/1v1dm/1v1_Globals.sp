@@ -82,6 +82,7 @@ ConVar g_NoDamageCvar;
 ConVar g_ShowKillFeedCvar;
 ConVar g_CustomDuelChanceCvar;
 
+ConVar g_Timelimit;
 
 
 

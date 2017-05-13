@@ -3,7 +3,7 @@
 #define DEBUG
 
 #define PLUGIN_AUTHOR "boomix"
-#define PLUGIN_VERSION "1.1"
+#define PLUGIN_VERSION "1.2"
 
 #include <sourcemod>
 #include <sdktools>
@@ -70,6 +70,7 @@ public void OnPluginStart()
 	OnPluginStartFunc();
 	
 	HookEvent("round_start", 		Event_RoundStart);
+	HookEvent("round_poststart", 	Event_OnRoundPostStart);
 	HookEvent("player_spawn", 		Event_OnPlayerSpawn);
 	HookEvent("player_team", 		Event_OnPlayerTeam);
 	HookEvent("player_death", 		Event_OnPlayerDeath, 	EventHookMode_Pre);
@@ -184,18 +185,6 @@ public Action CMD_Say(int client, const char[] command, int argc)
 	}
 	
 	return Plugin_Continue;
-}
-
-public Action CS_OnTerminateRound(float& delay, CSRoundEndReason& reason)
-{
-
-    //if (GameRules_GetProp("m_bWarmupPeriod") == 1)
-    //    return Plugin_Continue;
-        
-    //if (reason == CSRoundEnd_GameStart)
-    //    return Plugin_Handled;
-        
-    //return Plugin_Continue;
 }
 
 public Action CMD_Spawn(int client, int args)
