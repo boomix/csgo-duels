@@ -18,20 +18,13 @@ void Cvars_MapStart()
 	SetCvar("sv_show_team_equipment_prohibit",		"1");
 	SetCvar("sv_infinite_ammo",						"0");
 	SetCvar("mp_autoteambalance",					"0"); 
-
 }
-
 
 void SetCvar(char[] scvar, char[] svalue)
 {
 	Handle cvar = FindConVar(scvar);
 	SetConVarString(cvar, svalue, true);
 }
-
-
-
-
-
 
 //******
 //FUNCTIONS FROM MULTI 1V1 ARENA (thanks splewis)

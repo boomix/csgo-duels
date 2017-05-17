@@ -16,7 +16,6 @@ void Cookies_OnClientPutInServer(int client)
 
 void Cookies_OnPlayerTeam(int client)
 {
-
 	//Load all cookies
 	if(AreClientCookiesCached(client))
 	{
@@ -45,9 +44,6 @@ void Cookies_OnPlayerTeam(int client)
 		//Flashbang duel cookie
 		GetClientCookie(client, g_FlashbangDuel, sCookieVal, sizeof(sCookieVal));
 		cookieVal 						= StringToInt(sCookieVal);
-		b_FlashbangDuelEnabled[client] 	= (cookieVal == 1) ? true : false;
-			
-			
+		b_FlashbangDuelEnabled[client] 	= (cookieVal == 1) ? true : false;		
 	}
-	
 }

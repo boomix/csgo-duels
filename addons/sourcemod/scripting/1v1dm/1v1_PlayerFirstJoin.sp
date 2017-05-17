@@ -21,7 +21,6 @@ void PlayersFirstJoin_OnPlayerTeam(int client, int team)
 	}
 }
 
-
 public Action Telepors(Handle tmr, any client)
 {
 	if(IsClientInGame(client) && IsInRightTeam(client))
@@ -30,6 +29,8 @@ public Action Telepors(Handle tmr, any client)
 		GetArenaSpawn(LOBBY, GetClientTeam(client), org, ang);
 		TeleportEntity(client, org, ang, NULL_VECTOR);
 	}
+	
+	return Plugin_Handled;
 }
 
 public Action FirstJoin(Handle tmr, any client)
@@ -57,7 +58,6 @@ public Action FirstJoin(Handle tmr, any client)
 				
 				b_FirstWeaponSelect[client] = false;
 				
-				
 				//If server wants to show menu when client joins the game
 				if(g_WeaponMenuJoinCvar.IntValue == 1)
 					ShowMainMenu(client);
@@ -69,9 +69,9 @@ public Action FirstJoin(Handle tmr, any client)
 				SearchTmr[client] = CreateTimer(0.1, PlayerKilled, client, TIMER_FLAG_NO_MAPCHANGE);
 				
 				//LogMessage("%N started search timer from the join", client);
-				
 			}	
 		}
 	}
-
+	
+	return Plugin_Handled;
 }

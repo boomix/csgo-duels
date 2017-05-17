@@ -5,17 +5,18 @@ void WeaponMenu_OnClientPutInServer(int client){
 	b_HideMainWeaponMenu[client] = false;
 }
 
-
 void WeaponMenu_MapStart()
 {
-	g_Rifles = new ArrayList(40);
-	g_Pistols = new ArrayList(40);
-	
-	if(g_Rifles.Length > 0)
+	if(g_Rifles == null)
+	{
+		g_Rifles = new ArrayList(40);
+		g_Pistols = new ArrayList(40);
+	}
+	else
+	{
 		g_Rifles.Clear();
-	
-	if(g_Pistols.Length > 0)
 		g_Pistols.Clear();
+	}
 	
 	//g_numPistols = 0;
 	//g_numRifles = 0;
@@ -80,19 +81,16 @@ void WeaponMenu_MapStart()
 
 public Action CMD_Weapons(int client, int args)
 {
-	
 	if(StrContains(g_PrimaryWeapon[client], "weapon_") == -1)
 		ShowPrimaryWeaponMenu(client);
 	else
 		ShowMainMenu(client);
 		
 	return Plugin_Handled;
-	
 }
 
 void ShowMainMenu(int client)
 {
-	
 	Menu menu = new Menu(MenuHandlers_MainMenu);
 	menu.SetTitle("Weapon preferences");
 	
@@ -146,9 +144,6 @@ void ShowMainMenu(int client)
 		menu.AddItem("FlashbangDuel", AddItemChar);
 	}
 	
-	
-	
-	
 	//Display
 	menu.ExitButton = true;
 	menu.Display(client, 0);
@@ -183,6 +178,8 @@ public int MenuHandlers_MainMenu(Menu menu, MenuAction action, int client, int i
 					ChangeFlashbangDuel(client);
 			}
 		}
+		case MenuAction_End:
+			delete menu;
 	}
 }
 
@@ -270,6 +267,8 @@ public int MenuHandlers_PrimaryWeapon(Menu menu, MenuAction action, int client, 
 
 			}
 		}
+		case MenuAction_End:
+			delete menu;
 	}
 }
 
@@ -319,6 +318,8 @@ public int MenuHandlers_SecondaryWeapon(Menu menu, MenuAction action, int client
 
 			}
 		}
+		case MenuAction_End:
+			delete menu;
 	}
 }
 

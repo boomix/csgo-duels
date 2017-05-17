@@ -1,8 +1,5 @@
-
-
 void Configs_OnPluginStartFunc()
 {
-	
 	g_DamageGivenCvar 		= CreateConVar("sm_print_damage_given", 	"1", 							"Print in chat how much damage is given to enemy", 0, true, 0.0, true, 1.0);
 	g_ShowUsernameCvar 		= CreateConVar("sm_show_username", 			"1", 							"Show username in left top corner", 0, true, 0.0, true, 1.0);
 	g_PrefixCvar 			= CreateConVar("sm_prefix", 				"{GREEN}[DUELS]{WHITE} ", 		"Prefix for the chat");
@@ -23,16 +20,13 @@ void Configs_OnPluginStartFunc()
 	AutoExecConfig(true, "1v1DM", "sourcemod/1v1DM");
 	
 	HookConVarChange(g_PrefixCvar, PrefixChanged);
-
 	
 	FixPrefix();
-
 }
 
 public int PrefixChanged(Handle cvar, const char[] oldValue, const char[] newValue) {
 	FixPrefix();	
 }
-
 
 public void FixPrefix()
 {
@@ -57,5 +51,4 @@ public void FixPrefix()
 	StrCat(ColorPre, sizeof(ColorPre), PREFIX);
 	
 	PREFIX = ColorPre;
-
 }

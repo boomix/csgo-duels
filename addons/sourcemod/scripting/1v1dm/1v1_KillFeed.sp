@@ -1,6 +1,5 @@
 void KillFeed_PlayerDeath(int victim, int attacker, char sWeapon[128], bool headshot = false, int penetrated)
 {
-	
 	if(g_ShowKillFeedCvar.IntValue == 0)
 	{
 		bool IsValidV = IsValidClient(victim);
@@ -22,9 +21,8 @@ void KillFeed_PlayerDeath(int victim, int attacker, char sWeapon[128], bool head
 		if(IsValidK && victim != attacker)
 		   event.FireToClient(attacker);
 
-		CloseHandle ( event );
+		delete event;
 	}
-	
 }
 
 bool IsValidClient(int client)

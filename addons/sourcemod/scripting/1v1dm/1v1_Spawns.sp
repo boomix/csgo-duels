@@ -1,6 +1,5 @@
 #define CHECK_ARENA(%1) if (%1 <= 0 || %1 > g_maxArenas) PrintToServer("Arena %d is not valid", %1)
 
-
 void Spawns_MapStart()
 {
 	
@@ -19,10 +18,20 @@ void ResetArenasArray()
 
 public Action IfCustomSpawnsAreAdded(Handle tmr, any client)
 {
-	g_TSpawnsList = new ArrayList();
-	g_TAnglesList = new ArrayList();
-	g_CTSpawnsList = new ArrayList();
-	g_CTAnglesList = new ArrayList();
+	if(g_TSpawnsList == null)
+	{
+		g_TSpawnsList = new ArrayList();
+		g_TAnglesList = new ArrayList();
+		g_CTSpawnsList = new ArrayList();
+		g_CTAnglesList = new ArrayList();
+	}
+	else
+	{
+		g_TSpawnsList.Clear();
+		g_TAnglesList.Clear();
+		g_CTSpawnsList.Clear();
+		g_CTAnglesList.Clear();
+	}
 	
 	AddTeamSpawns("info_player_terrorist", g_TSpawnsList, g_TAnglesList);
 	AddTeamSpawns("info_player_counterterrorist", g_CTSpawnsList, g_CTAnglesList);
@@ -30,7 +39,6 @@ public Action IfCustomSpawnsAreAdded(Handle tmr, any client)
 	int ct = GetArraySize(g_CTSpawnsList);
 	int t = GetArraySize(g_TSpawnsList);
 	g_maxArenas = (ct < t) ? ct : t;
-	
 	
 	int lobbyID = -1;
 	for (int i = 1; i <= g_maxArenas; i++)
@@ -60,14 +68,13 @@ public Action IfCustomSpawnsAreAdded(Handle tmr, any client)
 			if(distanceNew < distanceLobby)
 				lobbyID = i;
 			
-		}	
-		
-		
+		}
 	}
 	
 	LOBBY = lobbyID;
+	
+	return Plugin_Handled;
 }
-
 
 int GetFreeArena(int prevOne = -1)
 {
@@ -101,8 +108,13 @@ int GetFreeArena(int prevOne = -1)
 		
 		int retArena = StringToInt(arenaID2);
 		if(retArena > 0 && retArena < g_maxArenas + 1)
+		{
+			delete AllArenas;
 			return retArena;
+		}
 	}
+	
+	delete AllArenas;
 	
 	return -1;
 		
@@ -292,7 +304,6 @@ int GetArenaSpawn(int arena, int team, float origin[3], float angle[3]) {
     
     if (team == CS_TEAM_T || team == CS_TEAM_CT)
     {
-	
         ArrayList spawns;
         ArrayList angles;
         if (team == CS_TEAM_CT) {
@@ -309,7 +320,6 @@ int GetArenaSpawn(int arena, int team, float origin[3], float angle[3]) {
         GetArrayArray(angles, index, angle);
 	
         return index;
-	    
     }
    
     return -1;

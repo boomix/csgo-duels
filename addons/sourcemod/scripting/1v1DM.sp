@@ -162,7 +162,6 @@ public Action CMD_Say(int client, const char[] command, int argc)
 {
 	if(client > 0)
 	{
-	
 		char message[128];
 		GetCmdArgString(message, sizeof(message));
 		ReplaceString(message, sizeof(message), "\"", "");
@@ -180,8 +179,6 @@ public Action CMD_Say(int client, const char[] command, int argc)
 			CMD_Lobby(client, 1);
 			return Plugin_Handled;
 		}
-
-		
 	}
 	
 	return Plugin_Continue;
@@ -189,7 +186,6 @@ public Action CMD_Say(int client, const char[] command, int argc)
 
 public Action CMD_Spawn(int client, int args)
 {
-
 	char arena[10];
 	float org[3], ang[3];
 	GetCmdArg(1, arena, sizeof(arena));
@@ -206,8 +202,7 @@ public Action Event_OnPlayerTeam2(Handle event, const char[] name, bool dontBroa
 }
 
 void hud_message(int client, char message[500]) 
-{ 
-	
+{
 	Format(message, sizeof(message), "%s\n%s", message, g_CustomRoundName[client]);
 	
 	int ent = !IsValidEntity(iTextEntity[client]) ? CreateEntityByName("game_text") : iTextEntity[client];
