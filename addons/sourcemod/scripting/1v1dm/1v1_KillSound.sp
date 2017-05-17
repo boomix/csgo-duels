@@ -1,10 +1,8 @@
 void KillSound_OnPlayerDeath(int killer)
 {
-
 	if(killer > 0)
 		if(IsClientInGame(killer) && !IsFakeClient(killer) && IsPlayerAlive(killer) && b_ClientSoundEnabled[killer])
 			ClientCommand(killer, "play */buttons/bell1.wav");
-	
 }
 
 void ChangeClientSound(int client){
@@ -19,5 +17,4 @@ void ChangeClientSound(int client){
 	}
 
 	ShowMainMenu(client);
-
 }

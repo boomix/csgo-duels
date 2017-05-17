@@ -1,6 +1,5 @@
 void ChangeAWPDuel(int client)
 {
-	
 	if(b_AwpDuelEnabled[client])
 	{
 		b_AwpDuelEnabled[client] = false;
@@ -11,12 +10,10 @@ void ChangeAWPDuel(int client)
 	}
 
 	ShowMainMenu(client);
-	
 }
 
 void GiveAWPDuelWeapons(int client)
 {
-	
 	RemoveGrenade(client);
 	
 	int weapon = GetPlayerWeaponSlot(client, CS_SLOT_PRIMARY);

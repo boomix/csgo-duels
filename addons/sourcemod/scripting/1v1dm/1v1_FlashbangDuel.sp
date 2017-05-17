@@ -1,6 +1,5 @@
 void ChangeFlashbangDuel(int client)
 {
-	
 	if(b_FlashbangDuelEnabled[client])
 	{
 		b_FlashbangDuelEnabled[client] = false;
@@ -11,7 +10,6 @@ void ChangeFlashbangDuel(int client)
 	}
 
 	ShowMainMenu(client);
-	
 }
 
 void GiveFlashbangs(int client)

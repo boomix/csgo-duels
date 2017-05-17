@@ -5,25 +5,26 @@ void WeaponMenu_OnClientPutInServer(int client){
 	b_HideMainWeaponMenu[client] = false;
 }
 
-
 void WeaponMenu_MapStart()
 {
-	g_Rifles = new ArrayList(40);
-	g_Pistols = new ArrayList(40);
-	
-	if(g_Rifles.Length > 0)
+	if(g_Rifles == null)
+	{
+		g_Rifles = new ArrayList(40);
+		g_Pistols = new ArrayList(40);
+	}
+	else
+	{
 		g_Rifles.Clear();
-	
-	if(g_Pistols.Length > 0)
 		g_Pistols.Clear();
+	}
 	
 	//g_numPistols = 0;
 	//g_numRifles = 0;
-	
+
 	char configFile[PLATFORM_MAX_PATH];
 	BuildPath(Path_SM, configFile, sizeof(configFile), "configs/1v1DM/weapons.cfg");
-	
-	
+
+
 	//Check if file exists
 	if (!FileExists(configFile)) {
 		LogError("The weapon config file does not exist: %s", configFile);
@@ -52,15 +53,15 @@ void WeaponMenu_MapStart()
 		//PrintToServer("%s", name);
 	} while (kv.GotoNextKey());
 	kv.Rewind();
-	
-	
+
+
 	// Parse the pistols section
 	if (!KvJumpToKey(kv, "Pistols")) {
 		LogError("The weapon config file did not contain a \"Pistols\" section: %s", configFile);
 		delete kv;
 		return;
 	}
-	
+
 	if (!kv.GotoFirstSubKey()) {
 		LogError("No pistols were found.");
 	}
@@ -71,23 +72,21 @@ void WeaponMenu_MapStart()
 		PushArrayString(g_Pistols, weapon);
 		PushArrayString(g_Pistols, name);
 	} while (kv.GotoNextKey());
-	
+
 	delete kv;
 	
 	//PrintToServer("RIFLES: %i | PISTOLS: %i", g_Rifles.Length, g_Pistols.Length);
-	
+
 }
 
 public Action CMD_Weapons(int client, int args)
 {
-	
 	if(StrContains(g_PrimaryWeapon[client], "weapon_") == -1)
 		ShowPrimaryWeaponMenu(client);
 	else
-	ShowMainMenu(client);
-	
+		ShowMainMenu(client);
+		
 	return Plugin_Handled;
-	
 }
 
 void ShowMainMenu(int client)
@@ -105,7 +104,6 @@ void ShowMainMenu(int client)
 	{
 		int rifleID = g_Rifles.FindString(g_PrimaryWeapon[client]);
 		g_Rifles.GetString(rifleID + 1, WeaponName, sizeof(WeaponName));
-		
 		Format(AddItemChar, 50, "%T","Rifle:",client,WeaponName);
 		menu.AddItem("OpenRifleMenu", AddItemChar);
 	}
@@ -115,7 +113,6 @@ void ShowMainMenu(int client)
 		//Secondary weapon
 		int pistolID = g_Pistols.FindString(g_SecondaryWeapon[client]);
 		g_Pistols.GetString(pistolID + 1, WeaponName, sizeof(WeaponName));
-		
 		Format(AddItemChar, 50, "%T","Pistol:",client,WeaponName);
 		menu.AddItem("OpenPistolMenu", AddItemChar);
 	}
@@ -124,7 +121,7 @@ void ShowMainMenu(int client)
 	if(b_ClientSoundEnabled[client])
 		Format(AddItemChar, 50, "%T","Kill sound: On",client);
 	else
-	Format(AddItemChar, 50, "%T","Kill sound: Off",client);
+		Format(AddItemChar, 50, "%T","Kill sound: Off",client);
 	menu.AddItem("ChangeSound", AddItemChar);
 	
 	
@@ -137,7 +134,7 @@ void ShowMainMenu(int client)
 		if(b_AwpDuelEnabled[client])
 			Format(AddItemChar, 50, "%T","AWP Duels: On",client);
 		else
-		Format(AddItemChar, 50, "%T","AWP Duels: Off",client);
+			Format(AddItemChar, 50, "%T","AWP Duels: Off",client);
 		menu.AddItem("AWPDuel", AddItemChar);
 	}
 	
@@ -146,16 +143,12 @@ void ShowMainMenu(int client)
 		if(b_FlashbangDuelEnabled[client])
 			Format(AddItemChar, 50, "%T","Flashbang Duels: On",client);
 		else
-		Format(AddItemChar, 50, "%T","Flashbang Duels: Off",client);
+			Format(AddItemChar, 50, "%T","Flashbang Duels: Off",client);
 		menu.AddItem("FlashbangDuel", AddItemChar);
 	}
 	
-	
-	
-	
 	//Display
 	menu.ExitButton = true;
-	
 	menu.Display(client, 0);
 	
 }
@@ -177,17 +170,19 @@ public int MenuHandlers_MainMenu(Menu menu, MenuAction action, int client, int i
 				
 				else if(StrEqual(info, "OpenPistolMenu"))
 					ShowSecondaryWeaponMenu(client);
-				
+					
 				else if(StrEqual(info, "ChangeSound"))
 					ChangeClientSound(client);
-				
+					
 				else if(StrEqual(info, "AWPDuel"))
 					ChangeAWPDuel(client);
-				
+					
 				else if(StrEqual(info, "FlashbangDuel"))
 					ChangeFlashbangDuel(client);
 			}
 		}
+		case MenuAction_End:
+			delete menu;
 	}
 }
 
@@ -197,11 +192,9 @@ void ShowPrimaryWeaponMenu(int client)
 	{
 		SetGlobalTransTarget(client);
 		Menu menu = new Menu(MenuHandlers_PrimaryWeapon);
-		
 		char Primary_weapon[64];
 		Format(Primary_weapon,sizeof(Primary_weapon),"%T","Primary weapon",client);
 		menu.SetTitle(Primary_weapon);
-		
 		
 		for (int i = 0; i < g_Rifles.Length; i+=2)
 		{
@@ -214,7 +207,7 @@ void ShowPrimaryWeaponMenu(int client)
 		if(b_FirstWeaponSelect[client])
 			menu.ExitButton = false;
 		else
-		menu.ExitButton = true;
+			menu.ExitButton = true;
 		menu.Display(client, 0);
 	} else {
 		ShowSecondaryWeaponMenu(client);
@@ -238,12 +231,12 @@ void ShowSecondaryWeaponMenu(int client)
 			g_Pistols.GetString(i + 1, weaponName, sizeof(weaponName));
 			menu.AddItem(weapon, weaponName);
 		}
-		
+	
 		if(b_FirstWeaponSelect[client])
 			menu.ExitButton = false;
 		else
-		menu.ExitButton = true;
-		
+			menu.ExitButton = true;
+			
 		menu.Display(client, 0);
 	}
 }
@@ -270,19 +263,21 @@ public int MenuHandlers_PrimaryWeapon(Menu menu, MenuAction action, int client, 
 					
 					GivePlayerItem(client, info);
 				}
-				
+
 				
 				//Save clients weapon choice
 				g_PrimaryWeapon[client] = info;
 				SetClientCookie(client, g_Rifle, info);
-				
+
 				if(StrContains(g_SecondaryWeapon[client], "weapon_") == -1)
 					ShowSecondaryWeaponMenu(client);
 				else
-				ShowMainMenu(client);
-				
+					ShowMainMenu(client);
+
 			}
 		}
+		case MenuAction_End:
+			delete menu;
 	}
 }
 
@@ -313,25 +308,25 @@ public int MenuHandlers_SecondaryWeapon(Menu menu, MenuAction action, int client
 				g_SecondaryWeapon[client] = info;
 				SetClientCookie(client, g_Pistol, info);
 				
-				
 				if(b_FirstWeaponSelect[client])
 				{
-					
 					b_FirstWeaponSelect[client] = false;
-					
+				
 					//Finished picking weapons
 					b_WaitingForEnemy[client] = true;
 					
 					//Check if there is free enemy
-					SearchTmr[client] = CreateTimer(0.1, PlayerKilled, client);
+					KillSearchTimer(client);
+					SearchTmr[client] = CreateTimer(0.1, PlayerKilled, client, TIMER_FLAG_NO_MAPCHANGE);
 					
 				}
 				
 				if(!b_HideMainWeaponMenu[client])
 					ShowMainMenu(client);
-				
 			}
 		}
+		case MenuAction_End:
+			delete menu;
 	}
 }
 
@@ -345,7 +340,7 @@ void GivePlayerHisWeapons(int client)
 	}
 	if(!StrEqual(g_PrimaryWeapon[client], "") && g_EnableRiflesCvar.IntValue == 1)
 		GivePlayerItem(client, g_PrimaryWeapon[client]);
-	
+		
 	int weapon2 = GetPlayerWeaponSlot(client, CS_SLOT_SECONDARY);
 	if(weapon2 > 0 && IsValidEntity(weapon2)) {
 		RemovePlayerItem(client, weapon2);
@@ -353,8 +348,8 @@ void GivePlayerHisWeapons(int client)
 	}
 	if(!StrEqual(g_SecondaryWeapon[client], "") && g_EnablePistolsCvar.IntValue == 1)
 		GivePlayerItem(client, g_SecondaryWeapon[client]);
-	
-	
+		
+		
 	int weapon3 = GetPlayerWeaponSlot(client, CS_SLOT_KNIFE);
 	if(weapon3 > 0 && IsValidEntity(weapon3)) {
 		RemovePlayerItem(client, weapon3);

@@ -11,11 +11,10 @@ public Action OnPlayerRunCmd(int client, int &iButtons, int &iImpulse, float fVe
 	if(i_PlayerEnemy[client] != -1)
 		client2 = i_PlayerEnemy[client];
 		
-	
 	PrintHintText(client, "waiting: %s|arena: %i\n enemy: %N", we, i_PlayerArena[client], client2);
-
+	
+	return Plugin_Continue;
 }
-
 
 void Players_OnClientPutInServer(int client)
 {
@@ -37,7 +36,6 @@ void Players_OnPlayerTeam(int client)
 
 void Players_OnClientDisconnect(int client)
 {
-
 	//If the player is with someone in arena
 	if(client > 0)
 	{
@@ -52,10 +50,8 @@ void Players_OnClientDisconnect(int client)
 					}		
 				}
 			}
-			
 	}
 }
-
 
 int OnePlayerLeftEvent(int client)
 {
@@ -84,7 +80,6 @@ public Action FirstJoin(Handle tmr, any client)
 {
 	if(IsClientInGame(client))
 	{
-		
 		//Respawn player if he is dead
 		if(!IsPlayerAlive(client))
 			CS_RespawnPlayer(client);
@@ -97,7 +92,8 @@ public Action FirstJoin(Handle tmr, any client)
 		//Show weapon menu
 		ShowPrimaryWeaponMenu(client);	
 	}
-
+	
+	return Plugin_Handled;
 }
 
 void Players_OnPlayerDeath(int client, int attacker)
@@ -132,6 +128,8 @@ public Action RespawnPlayer(Handle tmr, any client)
 {
 	if(IsClientInGame(client))
 		CS_RespawnPlayer(client);
+	
+	return Plugin_Handled;
 }
 
 public Action LobbyTeleport(Handle tmr, any client)
@@ -145,13 +143,14 @@ public Action LobbyTeleport(Handle tmr, any client)
 		b_WaitingForEnemy[client] = true;
 		i_PlayerEnemy[client] = -1;
 	}
+	
+	return Plugin_Handled;
 }
 
 public Action PlayerDeathNewEnemy(Handle tmr, any client)
 {
 	if(IsClientInGame(client))
-	{	
-
+	{
 		//Remove him from his old arena (set arena free)
 		b_ArenaFree[i_PlayerArena[client]] = true;
 		i_PlayerEnemy[client] = -1;
@@ -169,8 +168,9 @@ public Action PlayerDeathNewEnemy(Handle tmr, any client)
 			b_WaitingForEnemy[client] = true;
 			TeleportToLobby(client);
 		}
-		
 	}
+	
+	return Plugin_Handled;
 }
 
 int FindEnemy(int player)
@@ -193,7 +193,6 @@ int FindEnemy(int player)
 
 void SetupMatch(int client, int enemy, int arena = -1)
 {
-	
 	//If there is no arena, generate one
 	if(arena == -1)
 		arena = GetFreeArena(i_PrevArena[client]);
@@ -202,7 +201,6 @@ void SetupMatch(int client, int enemy, int arena = -1)
 		
 	if(arena > 0)
 	{
-		
 		i_PlayerEnemy[client] = enemy;
 		i_PlayerEnemy[enemy] = client;
 		
@@ -239,7 +237,6 @@ void SetupMatch(int client, int enemy, int arena = -1)
 		PrintToChat(client, "Sorry, there was error, arena was not found!");
 		PrintToConsole(client, "/SetupMatch/ Failed to find a free arena!");
 	}
-
 }
 
 public Action CheckForDamage(Handle timer, any arena)
@@ -253,7 +250,8 @@ public Action CheckForDamage(Handle timer, any arena)
 	}
 	
 	b_ArenaFree[arena] = true;
-
+	
+	return Plugin_Handled;
 }
 
 public Action SearchForNewEnemy(Handle tmr, any client)
@@ -266,11 +264,12 @@ public Action SearchForNewEnemy(Handle tmr, any client)
 			if(IsClientInGame(enemy))
 				SetupMatch(client, enemy);
 	}
+	
+	return Plugin_Handled;
 }
 
 void SetupPlayer(int client, int client2, int arena, int team)
 {
-
 	PrintToConsole(client, "/SetupPlayer/ PLAYER SETUP changeteams");
 
 	//Set clients team
@@ -309,17 +308,17 @@ void SetupPlayer(int client, int client2, int arena, int team)
 	pack.WriteCell(client2);
 	//CreateTimer(0.1, ShowUsername, client);
 	//PrintToChat(client, "%sTu esi arēnā ar %N (ARĒNA: %i)", PREFIX, client2, arena);
-	
 }
 
 public Action ShowUsername(Handle timer, Handle pack)
 {
-
 	ResetPack(pack);
 	int client = ReadPackCell(pack);
 	int client2 = ReadPackCell(pack);
 	char username[128];
 	GetClientName(client2, username, sizeof(username));
 	hud_message(client, username);
+	
+	return Plugin_Handled;
 }
 

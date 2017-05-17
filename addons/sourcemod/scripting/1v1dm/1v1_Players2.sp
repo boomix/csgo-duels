@@ -6,7 +6,7 @@ void Players_OnClientPutInServer(int client)
 	i_PlayerEnemy[client] 		= -1;
 	
 	//Timers
-	SearchTmr[client] 			= null;
+	KillSearchTimer(client);
 	
 	//Arena thing settings
 	i_PrevArena[client] 		= -1;
@@ -16,13 +16,11 @@ void Players_OnClientPutInServer(int client)
 
 }
 
-
 //**####################**
 //~~~ PLAYER DISCONNECT ~~
 //**####################**
 void Players_OnClientDisconnect(int client)
 {
-	
 	//LogMessage("%N disconnects from the server", client);
 	
 	//Check if player is playing and disconnects
@@ -31,7 +29,6 @@ void Players_OnClientDisconnect(int client)
 		//Kill damage timer, because already ingame
 		KillDamageTimer(i_PlayerArena[client]);
 		//LogMessage("Kill %N damage tmr, because he disconnected!", client);
-		
 	}
 	
 	//
@@ -54,19 +51,15 @@ void Players_OnClientDisconnect(int client)
 			TeleportToLobby(opponent, true, true);
 			
 			//LogMessage("%N didnt find any enemy, teleport him to lobby", opponent);
-		
 		}
 	}
-		
 }
-
 
 //**####################**
 //~~~ 	PLAYER DEATH 	~~
 //**####################**
 void Players_OnPlayerDeath(int client, int attacker)
-{
-	
+{	
 	//LogMessage("%N killed %N", attacker, client );
 	
 	//Someone dies from world?!
@@ -74,7 +67,10 @@ void Players_OnPlayerDeath(int client, int attacker)
 		int opponent = i_PlayerEnemy[client];
 		if(opponent > 0)
 			if(IsClientInGame(opponent) && IsInRightTeam(opponent))
+			{
+				KillSearchTimer(opponent);
 				SearchTmr[opponent] = CreateTimer(g_DuelDelayCvar.FloatValue, PlayerKilled, opponent, TIMER_FLAG_NO_MAPCHANGE);
+			}
 	}
 	
 	//Keep them arena for small amount of time, so they know they killed someone :D
@@ -84,10 +80,11 @@ void Players_OnPlayerDeath(int client, int attacker)
 	
 	if(attacker > 0)
 		if(IsClientInGame(attacker) && IsInRightTeam(attacker))
+		{
+			KillSearchTimer(attacker);
 			SearchTmr[attacker] = CreateTimer(g_DuelDelayCvar.FloatValue, PlayerKilled, attacker, TIMER_FLAG_NO_MAPCHANGE);
-	
+		}
 }
-
 
 //----------------------------
 //Player who got killed timer
@@ -96,67 +93,54 @@ public Action PlayerGotKilled(Handle tmr, any client)
 {
 	if(IsClientInGame(client) && IsInRightTeam(client))
 		TeleportToLobby(client, true);
+	
+	return Plugin_Handled;
 }
-
 
 //------------------------------
 //Player who killed other player
 //------------------------------
 public Action PlayerKilled(Handle tmr, any client)
 {
-	if(client > 0)
+	SearchTmr[client] = null;
+	
+	if(IsClientInGame(client) && IsInRightTeam(client))
 	{
-		if(IsClientInGame(client) && IsInRightTeam(client))
-		{
-			//LogMessage("%N started PlayerKilled function", client );
+		//LogMessage("%N started PlayerKilled function", client );
+		
+		//Destroy timer
+		
+		
+		//Set his arena free
+		if(i_PlayerArena[client] != LOBBY)
+			b_ArenaFree[i_PlayerArena[client]] = true;
+	
+		//He wants to find opponent (someone from lobby)
+		int opponent = FindOpponent(client);
+		if(opponent > -1){
 			
-			//Destroy timer
-			SearchTmr[client] 		 = null;
+			//LogMessage("%N found opponent %N (Match setup starts)", client, opponent);
 			
-			//Set his arena free
+			//Setup match
+			SetupMatch(client, opponent);
+	
+		} else {
+			//No opponent found
 			if(i_PlayerArena[client] != LOBBY)
-				b_ArenaFree[i_PlayerArena[client]] = true;
-		
-			//He wants to find opponent (someone from lobby)
-			int opponent = FindOpponent(client);
-			if(opponent > -1){
-				
-				//LogMessage("%N found opponent %N (Match setup starts)", client, opponent);
-				
-				//Setup match
-				SetupMatch(client, opponent);
-		
-			} else {
-				//No opponent found
-				if(i_PlayerArena[client] != LOBBY)
-				{
-					PrintToChat(client, "%sSorry, no opponent found!", PREFIX);
-					TeleportToLobby(client, true);
-				}
-				
-				//Make him search for enemy, if he can find one
-				SearchTmr[client] = CreateTimer(1.0, PlayerKilled, client, TIMER_FLAG_NO_MAPCHANGE);
-				
-				//LogMessage("%N didnt find any opponents, so we start search for him again", client);
+			{
+				PrintToChat(client, "%sSorry, no opponent found!", PREFIX);
+				TeleportToLobby(client, true);
 			}
-		
+			
+			//Make him search for enemy, if he can find one
+			SearchTmr[client] = CreateTimer(1.0, PlayerKilled, client, TIMER_FLAG_NO_MAPCHANGE);
+			
+			//LogMessage("%N didnt find any opponents, so we start search for him again", client);
 		}
 	}
+	
+	return Plugin_Handled;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 //**####################**
 //~~~ STOCK FUNCTIONS ~~
@@ -217,7 +201,6 @@ int FindOpponent(int client)
 	}
 	int opponent2 = (count2 == 0) ? -1 : AllPlayers2[GetRandomInt(0, count2 - 1)];
 	
-
 	if(opponent2 == -1)
 	{
 		
@@ -237,9 +220,7 @@ int FindOpponent(int client)
 	} else {
 		
 		opponent = opponent2;
-		
 	}
-
 	
 	//Lets check if that player is still avalible
 	if(opponent > 0)
@@ -261,7 +242,6 @@ int FindOpponent(int client)
 
 void SetupMatch(int client, int enemy)
 {
-	
 	//Check if both players are still ingame (because of timer bellow)
 	if(IsClientInGame(client) && IsClientInGame(enemy) && IsInRightTeam(client) && IsInRightTeam(enemy))
 	{
@@ -323,7 +303,6 @@ void SetupMatch(int client, int enemy)
 			//Make 50/50 to have custom round if both of them have enabled any
 			if(customDuels != 0 && GetRandomInt(1, 100) <= g_CustomDuelChanceCvar.IntValue)
 			{
-				
 				//Generate one of enabled duels
 				int randomDuel = GetRandomInt(0, customDuelsArray.Length - 1);
 				char randomNames[50];
@@ -361,11 +340,11 @@ void SetupMatch(int client, int enemy)
 			
 			}
 			
+			delete customDuelsArray;
+			
 			//Create new duel if there is no damage in 25 seconds
 			ArenaDamageTmr[arena] = CreateTimer(g_NoDamageCvar.FloatValue, ArenaDamageTimer, arena, TIMER_FLAG_NO_MAPCHANGE);
-			
 		}
-		
 	}
 }
 
@@ -375,6 +354,8 @@ public Action TrySetupMatchAgain(Handle timer, Handle pack)
 	int client = ReadPackCell(pack);	
 	int enemy = ReadPackCell(pack);
 	SetupMatch(client, enemy);
+	
+	return Plugin_Handled;
 }
 
 void KillSearchTimer(int client)
@@ -397,7 +378,6 @@ void KillDamageTimer(int arena)
 
 void SetupPlayer(int client, int opponent, int arena, int team, int giveWeapons = true)
 {
-
 	//LogMessage("teleporting %N to arena %i, his opponent %N | SetupPlayer function", client, arena, opponent);
 
 	//Teleport to arena
@@ -447,7 +427,6 @@ void TeleportToArena(int client, int team, int arena)
 
 public Action ArenaDamageTimer(Handle timer, any arena)
 {
-	
 	//LogMessage("There was no damage in arena %i for 25 seconds", arena);
 	
 	//Set timer to null
@@ -466,7 +445,6 @@ public Action ArenaDamageTimer(Handle timer, any arena)
 		}
 	}
 	
-	
 	//One player teleport to lobby, one player searches for new enemy
 	int random = GetRandomInt(1, 2);
 	
@@ -475,15 +453,23 @@ public Action ArenaDamageTimer(Handle timer, any arena)
 		//LogMessage("Teleporting %N to lobby, because 25sec", player2);
 		TeleportToLobby(player2, true);
 		if(player > 0)
+		{
+			KillSearchTimer(player);
 			SearchTmr[player] = CreateTimer(0.1, PlayerKilled, player, TIMER_FLAG_NO_MAPCHANGE);
+		}
 	} else {
 		//LogMessage("Teleporting %N to lobby, because 25sec", player);
 		TeleportToLobby(player, true);
 		if(player2 > 0)
+		{
+			KillSearchTimer(player);
 			SearchTmr[player2] = CreateTimer(0.1, PlayerKilled, player2, TIMER_FLAG_NO_MAPCHANGE);
+		}
 	}
 	
 	//b_ArenaFree[arena] = true;
+	
+	return Plugin_Handled;
 }
 
 bool IsInRightTeam(int client)

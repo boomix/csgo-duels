@@ -9,19 +9,18 @@ if(IsClientInGame(%1) && !IsFakeClient(%1) && GetClientTeam(i) == CS_TEAM_CT || 
 char PREFIX[150] = "";
 
 //Weapons
-ArrayList g_Rifles;
-ArrayList g_Pistols;
+ArrayList g_Rifles = null;
+ArrayList g_Pistols = null;
 char g_PrimaryWeapon[MAXPLAYERS + 1][50];
 char g_SecondaryWeapon[MAXPLAYERS + 1][50];
 char g_CustomRoundName[MAXPLAYERS + 1][50];
 bool b_FirstWeaponSelect[MAXPLAYERS + 1];
 
 //Spawns
-ArrayList g_TSpawnsList;
-ArrayList g_TAnglesList;
-ArrayList g_CTSpawnsList;
-ArrayList g_CTAnglesList;
-
+ArrayList g_TSpawnsList = null;
+ArrayList g_TAnglesList = null;
+ArrayList g_CTSpawnsList = null;
+ArrayList g_CTAnglesList = null;
 
 ConVar g_RoundRestartDelayCvar;
 
@@ -45,7 +44,7 @@ bool b_NullOnce;
 int LOBBY = 1;
 
 Handle ArenaDamageTmr[64];
-Handle SearchTmr[MAXPLAYERS + 1];
+Handle SearchTmr[MAXPLAYERS + 1] = {null, ...};
 
 //Cookies
 Handle g_SoundEnabled;

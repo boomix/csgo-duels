@@ -29,6 +29,8 @@ public Action Event_RoundStart(Handle event, const char[] name, bool dontBroadca
 {
 	g_roundStartedTime = GetTime();
 	b_NullOnce = true;
+	
+	return Plugin_Continue;
 }
 
 public Action Event_OnRoundPostStart(Event event, const char[] name, bool dontBroadcast) 
@@ -36,7 +38,9 @@ public Action Event_OnRoundPostStart(Event event, const char[] name, bool dontBr
 	SetCvar("mp_autoteambalance",				"0"); 
 	SetCvar("mp_ignore_round_win_conditions", 	"1");
 	g_Timelimit = FindCvarAndLogError("mp_timelimit");
-	GameRules_SetProp("m_iRoundTime", g_Timelimit.IntValue * 60, 4, 0, true);	
+	GameRules_SetProp("m_iRoundTime", g_Timelimit.IntValue * 60, 4, 0, true);
+	
+	return Plugin_Continue;	
 }
 
 public void OnClientPutInServer(int client)
@@ -66,6 +70,7 @@ public Action Event_OnPlayerSpawn(Event event, const char[] name, bool dontBroad
 	HideRadar_OnPlayerSpawn(client);
 	//Players2_OnPlayerSpawn(client);
 	
+	return Plugin_Continue;
 }
 
 public Action Event_OnPlayerTeam(Event event, const char[] name, bool dontBroadcast) 
@@ -88,7 +93,6 @@ public Action Event_OnPlayerTeam(Event event, const char[] name, bool dontBroadc
 	}
 	
 	return Plugin_Continue;
-	
 }
 
 public Action Event_PlayerHurt(Event event, const char[] name, bool dontBroadcast)
@@ -99,6 +103,7 @@ public Action Event_PlayerHurt(Event event, const char[] name, bool dontBroadcas
 	
 	ShowDamage_PlayerHurt(attacker, damage);
 	
+	return Plugin_Continue;
 }
 
 public Action Event_OnPlayerDeath(Event event, const char[] name, bool dontBroadcast) 
@@ -120,11 +125,11 @@ public Action Event_OnPlayerDeath(Event event, const char[] name, bool dontBroad
 	if(g_ShowKillFeedCvar.IntValue == 0)
 		SetEventBroadcast(event, true);
 	
+	return Plugin_Continue;
 }
 
 public Action OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int damagecustom)
 {
-	
 	//Stop timer in that arena (afk timer?)
 	if(IsClientInGame(victim) && attacker > 0)
 		KillDamageTimer(i_PlayerArena[victim]);
@@ -137,9 +142,7 @@ public Action OnTakeDamage(int victim, int &attacker, int &inflictor, float &dam
 	if(i_PlayerEnemy[victim] != attacker && attacker > 0 || i_PlayerEnemy[attacker] != victim && attacker > 0)
 		return Plugin_Handled;
 	
-	
 	return Plugin_Continue;
-	
 }
 
 
@@ -152,7 +155,6 @@ public void OnGameFrame()
 			b_NullOnce = false;
 			SetCvar("mp_ignore_round_win_conditions", "0");
 			CreateTimer(1.0, EndRound, _, TIMER_FLAG_NO_MAPCHANGE);
-			
 		}
 	}
 }
@@ -161,8 +163,9 @@ public Action EndRound(Handle tmr, any client)
 {
 	float delay = g_RoundRestartDelayCvar.FloatValue;
 	CS_TerminateRound(delay, CSRoundEnd_TerroristWin);
+	
+	return Plugin_Continue;
 }
-
 
 public int GetTotalRoundTime() 
 {
