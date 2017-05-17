@@ -87,6 +87,7 @@ public void OnPluginStart()
 	
 	
 	g_offsCollisionGroup 	= FindSendPropInfo("CBaseEntity", "m_CollisionGroup");
+	LoadTranslations("1v1DM.phrases");
 
 }
 

@@ -1,0 +1,61 @@
+"Phrases"
+{
+	"Rifle:"
+	{
+	  "#format"	"{1:s}"
+		"chi"		"主武器:{1}"
+	}
+	
+	"Pistol:"
+	{
+	  "#format"	"{1:s}"
+		"chi"		"手枪:{1}"
+	}
+	
+	"Kill sound: On"
+	{
+		"chi"		"击杀音效: 开启"
+	}
+	
+	"Kill sound: Off"
+	{
+		"chi"		"击杀音效: 关闭"
+	}
+	
+	"AWP Duels: On"
+	{
+		"chi"		"AWP决斗: 开启"
+	}
+	
+	"AWP Duels: Off"
+	{
+		"chi"		"AWP 决斗: 关闭"
+	}
+	
+	"Flashbang Duels: On"
+	{
+		"chi"		"闪光弹 决斗: 开启"
+	}
+	
+	"Flashbang Duels: Off"
+	{
+		"chi"		"闪光弹 决斗: 关闭"
+	}
+	
+	"Primary weapon"
+	{
+		"chi"		"主武器菜单"
+	}
+	
+	"Secondary Weapon"
+	{
+		"chi"		"副武器菜单"
+	}
+	
+	"Weapon preferences"
+	{
+		"chi"		"武器偏好设置"
+	}
+	
+}
+
