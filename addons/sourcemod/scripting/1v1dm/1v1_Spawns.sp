@@ -171,65 +171,6 @@ static void AddTeamSpawns(const char[] className, ArrayList spawnList, ArrayList
        		spawns.PushArray(spawn);
        		angles.PushArray(angle);
 
-       		
-       		//There already is array with that arena
-       		/*if(iArenaArrayID[currentArenaID] != -1){
-				
-        		ArrayList spawns = view_as<ArrayList>(spawnList.Get(iArenaArrayID[currentArenaID]));
-       			ArrayList angles = view_as<ArrayList>(angleList.Get(iArenaArrayID[currentArenaID]));
-       			spawns.PushArray(spawn);
-                angles.PushArray(angle);
-               // PrintToServer("%i added to array %i", currentArenaID, iArenaArrayID[currentArenaID]);
-                
-			} else {
-			
-				//Create new array
-       			ArrayList spawns = new ArrayList(3);
-			    ArrayList angles = new ArrayList(3);
-			    spawns.PushArray(spawn);
-			    angles.PushArray(angle);
-			    iArenaArrayID[currentArenaID] = PushArrayCell(spawnList, spawns);
-			    //PrintToServer("arena %i created array %i", currentArenaID, iArenaArrayID[currentArenaID]);
-			    PushArrayCell(angleList, angles);			
-				
-			}*/
-       		
-       		/*if(currentArenaID == LastArenaID)
-       		{
-       			//Put in last array
-        		ArrayList spawns = view_as<ArrayList>(spawnList.Get(GetArraySize(spawnList) - 1));
-       			ArrayList angles = view_as<ArrayList>(angleList.Get(GetArraySize(spawnList) - 1));
-       			spawns.PushArray(spawn);
-                angles.PushArray(angle);
-       			
-       		} else {
-       			
-       			//Check if array doesnt exist already
-       			if(currentArenaID <= GetArraySize(spawnList))
-       			{
-       				//Put in last array
-        			ArrayList spawns = view_as<ArrayList>(spawnList.Get(currentArenaID - 1));
-       				ArrayList angles = view_as<ArrayList>(angleList.Get(currentArenaID - 1));
-       				spawns.PushArray(spawn);
-                	angles.PushArray(angle);
-       				
-       			} else {
-       			
-	       			//Create new array
-	       			ArrayList spawns = new ArrayList(3);
-				    ArrayList angles = new ArrayList(3);
-				    spawns.PushArray(spawn);
-				    angles.PushArray(angle);
-				    PushArrayCell(spawnList, spawns);
-				    PushArrayCell(angleList, angles);
-			    
-			   	}
-       		}*/
-       		
-       		//LastArenaID = currentArenaID;
-       		
-       		//PrintToServer("NAME: %s | %i | array: %i", spawnName, currentArenaID, iArenaArrayID[currentArenaID]);
-
       	} else {
     		
         	AddSpawn(spawn, angle, spawnList, angleList);
@@ -323,20 +264,4 @@ int GetArenaSpawn(int arena, int team, float origin[3], float angle[3]) {
     }
    
     return -1;
-}
-
-public void Spawns_MapEnd() {
-    CloseNestedList(g_TSpawnsList);
-    CloseNestedList(g_TAnglesList);
-    CloseNestedList(g_CTSpawnsList);
-    CloseNestedList(g_CTAnglesList);
-}
-
-void CloseNestedList(ArrayList list) {
-    int n = list.Length;
-    for (int i = 0; i < n; i++) {
-        ArrayList tmp = view_as<ArrayList>(list.Get(i));
-        delete tmp;
-    }
-    delete list;
 }

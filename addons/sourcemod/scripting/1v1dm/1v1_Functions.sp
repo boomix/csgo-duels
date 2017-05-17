@@ -15,10 +15,6 @@ public void OnMapStart()
 	Cvars_MapStart();
 }
 
-public void OnMapEnd()
-{
-	Spawns_MapEnd();
-}
 
 public void OnConfigsExecuted() 
 {

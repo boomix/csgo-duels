@@ -21,14 +21,13 @@ void Players_OnClientPutInServer(int client)
 //**####################**
 void Players_OnClientDisconnect(int client)
 {
-	//LogMessage("%N disconnects from the server", client);
+	KillSearchTimer(client);
 	
 	//Check if player is playing and disconnects
 	if(i_PlayerArena[client] != LOBBY)
 	{
 		//Kill damage timer, because already ingame
 		KillDamageTimer(i_PlayerArena[client]);
-		//LogMessage("Kill %N damage tmr, because he disconnected!", client);
 	}
 	
 	//
@@ -102,7 +101,7 @@ public Action PlayerGotKilled(Handle tmr, any client)
 //------------------------------
 public Action PlayerKilled(Handle tmr, any client)
 {
-	SearchTmr[client] = null;
+	KillSearchTimer(client);
 	
 	if(IsClientInGame(client) && IsInRightTeam(client))
 	{
@@ -181,7 +180,10 @@ void TeleportToLobby(int client, bool searchEnable, bool ImSearching = false)
 				b_WaitingForEnemy[client] = false;
 				
 			if(ImSearching && SearchTmr[client] == null)
+			{
+				KillSearchTimer(client);
 				SearchTmr[client] = CreateTimer(0.1, PlayerKilled, client, TIMER_FLAG_NO_MAPCHANGE);
+			}
 				
 		}
 	}
