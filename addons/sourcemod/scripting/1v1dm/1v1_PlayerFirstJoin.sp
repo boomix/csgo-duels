@@ -66,6 +66,7 @@ public Action FirstJoin(Handle tmr, any client)
 				b_WaitingForEnemy[client] = true;
 					
 				//Check if there is free enemy
+				KillSearchTimer(client);
 				SearchTmr[client] = CreateTimer(0.1, PlayerKilled, client, TIMER_FLAG_NO_MAPCHANGE);
 				
 				//LogMessage("%N started search timer from the join", client);

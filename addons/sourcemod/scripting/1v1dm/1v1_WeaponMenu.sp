@@ -299,23 +299,21 @@ public int MenuHandlers_SecondaryWeapon(Menu menu, MenuAction action, int client
 				g_SecondaryWeapon[client] = info;
 				SetClientCookie(client, g_Pistol, info);
 				
-				
 				if(b_FirstWeaponSelect[client])
 				{
-					
 					b_FirstWeaponSelect[client] = false;
 				
 					//Finished picking weapons
 					b_WaitingForEnemy[client] = true;
 					
 					//Check if there is free enemy
-					SearchTmr[client] = CreateTimer(0.1, PlayerKilled, client);
+					KillSearchTimer(client);
+					SearchTmr[client] = CreateTimer(0.1, PlayerKilled, client, TIMER_FLAG_NO_MAPCHANGE);
 					
 				}
 				
 				if(!b_HideMainWeaponMenu[client])
 					ShowMainMenu(client);
-
 			}
 		}
 		case MenuAction_End:

@@ -6,7 +6,7 @@ void Players_OnClientPutInServer(int client)
 	i_PlayerEnemy[client] 		= -1;
 	
 	//Timers
-	SearchTmr[client] 			= null;
+	KillSearchTimer(client);
 	
 	//Arena thing settings
 	i_PrevArena[client] 		= -1;
@@ -67,7 +67,10 @@ void Players_OnPlayerDeath(int client, int attacker)
 		int opponent = i_PlayerEnemy[client];
 		if(opponent > 0)
 			if(IsClientInGame(opponent) && IsInRightTeam(opponent))
+			{
+				KillSearchTimer(opponent);
 				SearchTmr[opponent] = CreateTimer(g_DuelDelayCvar.FloatValue, PlayerKilled, opponent, TIMER_FLAG_NO_MAPCHANGE);
+			}
 	}
 	
 	//Keep them arena for small amount of time, so they know they killed someone :D
@@ -77,7 +80,10 @@ void Players_OnPlayerDeath(int client, int attacker)
 	
 	if(attacker > 0)
 		if(IsClientInGame(attacker) && IsInRightTeam(attacker))
+		{
+			KillSearchTimer(attacker);
 			SearchTmr[attacker] = CreateTimer(g_DuelDelayCvar.FloatValue, PlayerKilled, attacker, TIMER_FLAG_NO_MAPCHANGE);
+		}
 }
 
 //----------------------------
@@ -96,42 +102,40 @@ public Action PlayerGotKilled(Handle tmr, any client)
 //------------------------------
 public Action PlayerKilled(Handle tmr, any client)
 {
-	if(client > 0)
+	SearchTmr[client] = null;
+	
+	if(IsClientInGame(client) && IsInRightTeam(client))
 	{
-		if(IsClientInGame(client) && IsInRightTeam(client))
-		{
-			//LogMessage("%N started PlayerKilled function", client );
+		//LogMessage("%N started PlayerKilled function", client );
+		
+		//Destroy timer
+		
+		
+		//Set his arena free
+		if(i_PlayerArena[client] != LOBBY)
+			b_ArenaFree[i_PlayerArena[client]] = true;
+	
+		//He wants to find opponent (someone from lobby)
+		int opponent = FindOpponent(client);
+		if(opponent > -1){
 			
-			//Destroy timer
-			SearchTmr[client] 		 = null;
+			//LogMessage("%N found opponent %N (Match setup starts)", client, opponent);
 			
-			//Set his arena free
+			//Setup match
+			SetupMatch(client, opponent);
+	
+		} else {
+			//No opponent found
 			if(i_PlayerArena[client] != LOBBY)
-				b_ArenaFree[i_PlayerArena[client]] = true;
-		
-			//He wants to find opponent (someone from lobby)
-			int opponent = FindOpponent(client);
-			if(opponent > -1){
-				
-				//LogMessage("%N found opponent %N (Match setup starts)", client, opponent);
-				
-				//Setup match
-				SetupMatch(client, opponent);
-		
-			} else {
-				//No opponent found
-				if(i_PlayerArena[client] != LOBBY)
-				{
-					PrintToChat(client, "%sSorry, no opponent found!", PREFIX);
-					TeleportToLobby(client, true);
-				}
-				
-				//Make him search for enemy, if he can find one
-				SearchTmr[client] = CreateTimer(1.0, PlayerKilled, client, TIMER_FLAG_NO_MAPCHANGE);
-				
-				//LogMessage("%N didnt find any opponents, so we start search for him again", client);
+			{
+				PrintToChat(client, "%sSorry, no opponent found!", PREFIX);
+				TeleportToLobby(client, true);
 			}
-		
+			
+			//Make him search for enemy, if he can find one
+			SearchTmr[client] = CreateTimer(1.0, PlayerKilled, client, TIMER_FLAG_NO_MAPCHANGE);
+			
+			//LogMessage("%N didnt find any opponents, so we start search for him again", client);
 		}
 	}
 	
@@ -449,12 +453,18 @@ public Action ArenaDamageTimer(Handle timer, any arena)
 		//LogMessage("Teleporting %N to lobby, because 25sec", player2);
 		TeleportToLobby(player2, true);
 		if(player > 0)
+		{
+			KillSearchTimer(player);
 			SearchTmr[player] = CreateTimer(0.1, PlayerKilled, player, TIMER_FLAG_NO_MAPCHANGE);
+		}
 	} else {
 		//LogMessage("Teleporting %N to lobby, because 25sec", player);
 		TeleportToLobby(player, true);
 		if(player2 > 0)
+		{
+			KillSearchTimer(player);
 			SearchTmr[player2] = CreateTimer(0.1, PlayerKilled, player2, TIMER_FLAG_NO_MAPCHANGE);
+		}
 	}
 	
 	//b_ArenaFree[arena] = true;
