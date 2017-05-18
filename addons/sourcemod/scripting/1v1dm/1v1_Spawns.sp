@@ -63,8 +63,6 @@ public Action IfCustomSpawnsAreAdded(Handle tmr, any client)
 			float distanceLobby = GetVectorDistance(mid, org, true);
 			float distanceNew = GetVectorDistance(mid, org2, true);
 			
-			//PrintToServer("%f un %f", distanceLobby, distanceNew);
-			
 			if(distanceNew < distanceLobby)
 				lobbyID = i;
 			
@@ -177,11 +175,6 @@ static void AddTeamSpawns(const char[] className, ArrayList spawnList, ArrayList
         
        	}
     }
-    
-    //int ent2 = -1;
-    //while ((ent2 = FindEntityByClassname(ent2, className)) != -1) {
-    //	BoomEoFix(ent2);
-    //}
     
 }
 

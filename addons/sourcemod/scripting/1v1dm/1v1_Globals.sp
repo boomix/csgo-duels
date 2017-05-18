@@ -80,21 +80,11 @@ ConVar g_DuelDelayCvar;
 ConVar g_NoDamageCvar;
 ConVar g_ShowKillFeedCvar;
 ConVar g_CustomDuelChanceCvar;
+ConVar g_ChallengeMinPlayerCvar;
+ConVar g_ChallengeEnabled;
 
 ConVar g_Timelimit;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+int iChallengeEnemy[MAXPLAYERS + 1];
+int iChallengeInvite[MAXPLAYERS + 1];
+Handle ChallengeTmrInvite[MAXPLAYERS + 1];

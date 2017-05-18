@@ -3,13 +3,13 @@
 	"Rifle:"
 	{
 	  "#format"	"{1:s}"
-		"chi"		"主武器:{1}"
+		"chi"		"主武器: {1}"
 	}
 	
 	"Pistol:"
 	{
 	  "#format"	"{1:s}"
-		"chi"		"手枪:{1}"
+		"chi"		"手枪: {1}"
 	}
 	
 	"Kill sound: On"
@@ -55,6 +55,72 @@
 	"Weapon preferences"
 	{
 		"chi"		"武器偏好设置"
+	}
+	
+		
+	"Your already in challenge"
+	{
+		"chi"		"Your already in challenge, write !stop to stop the challenge"
+	}
+	
+	"Player not found"
+	{
+		"chi"		"Player not found!"
+	}
+	
+	"There are several players with this name"
+	{
+		"chi"		"Sorry, there are more players with this username!"
+	}
+	
+	"You cant select yourself as enemy"
+	{
+		"chi"		"You cant select yourself as enemy!"
+	}
+	
+	"Select opponent"
+	{
+		"chi"		"Select opponent"
+	}
+	
+	"Opponent left the game"
+	{
+		"chi"		"Sorry, your opponent left the game"
+	}
+	
+	"Opponent in challenge"
+	{
+		"chi"		"Sorry, it`s too late, he is already in challenge"
+	}
+	
+	"Challenge is sent"
+	{
+		"chi"		"Challenge is sent to {1}"
+	}
+	
+	"Player invited you to challenge"
+	{
+		"chi"		"{1} invited you to challenge, write !accept to accept his challenge."
+	}
+	
+	"Invite expired"
+	{
+		"chi" 		"Sorry, invite expired!"
+	}
+	
+	"No invites"
+	{
+		"chi"		"Sorry, you dont have any invites!"
+	}
+	
+	"You left challenge"
+	{
+		"chi"		"You left the challenge!"
+	}
+	
+	"Opponent left the challenge"
+	{
+		"chi"		"Your opponent {1} left the challenge!"
 	}
 	
 }

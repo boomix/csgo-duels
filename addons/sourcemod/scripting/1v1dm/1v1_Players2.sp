@@ -40,7 +40,6 @@ void Players_OnClientDisconnect(int client)
 	{
 		if(IsClientInGame(opponent) && IsInRightTeam(opponent) && i_PlayerEnemy[opponent] == client)
 		{
-			//PrintToChat(opponent, "%sSorry, your enemy left the game!", PREFIX);
 			
 			i_PrevEnemy[opponent] = -1;
 			
@@ -48,8 +47,6 @@ void Players_OnClientDisconnect(int client)
 			
 			//Teleport to lobby, because enemy left
 			TeleportToLobby(opponent, true, true);
-			
-			//LogMessage("%N didnt find any enemy, teleport him to lobby", opponent);
 		}
 	}
 }
@@ -58,8 +55,7 @@ void Players_OnClientDisconnect(int client)
 //~~~ 	PLAYER DEATH 	~~
 //**####################**
 void Players_OnPlayerDeath(int client, int attacker)
-{	
-	//LogMessage("%N killed %N", attacker, client );
+{
 	
 	//Someone dies from world?!
 	if(attacker == 0) {
@@ -105,11 +101,7 @@ public Action PlayerKilled(Handle tmr, any client)
 	
 	if(IsClientInGame(client) && IsInRightTeam(client))
 	{
-		//LogMessage("%N started PlayerKilled function", client );
-		
-		//Destroy timer
-		
-		
+
 		//Set his arena free
 		if(i_PlayerArena[client] != LOBBY)
 			b_ArenaFree[i_PlayerArena[client]] = true;
@@ -118,23 +110,16 @@ public Action PlayerKilled(Handle tmr, any client)
 		int opponent = FindOpponent(client);
 		if(opponent > -1){
 			
-			//LogMessage("%N found opponent %N (Match setup starts)", client, opponent);
-			
 			//Setup match
 			SetupMatch(client, opponent);
 	
 		} else {
 			//No opponent found
 			if(i_PlayerArena[client] != LOBBY)
-			{
-				PrintToChat(client, "%sSorry, no opponent found!", PREFIX);
 				TeleportToLobby(client, true);
-			}
 			
 			//Make him search for enemy, if he can find one
 			SearchTmr[client] = CreateTimer(1.0, PlayerKilled, client, TIMER_FLAG_NO_MAPCHANGE);
-			
-			//LogMessage("%N didnt find any opponents, so we start search for him again", client);
 		}
 	}
 	
@@ -169,8 +154,6 @@ void TeleportToLobby(int client, bool searchEnable, bool ImSearching = false)
 			i_PlayerArena[client] 		= LOBBY;
 			i_PlayerEnemy[client] 		= -1;
 			
-			//LogMessage("%N got teleported to lobby by TeleportToLobby function", client);
-			
 			//Make 
 			SetEntData(client, g_offsCollisionGroup, 2, 4, true);
 			
@@ -191,6 +174,22 @@ void TeleportToLobby(int client, bool searchEnable, bool ImSearching = false)
 
 int FindOpponent(int client)
 {
+	
+	int enemy = iChallengeEnemy[client];
+	if(enemy > 0)
+	{
+		if(i_PlayerArena[enemy] == LOBBY && !b_FirstWeaponSelect[enemy] && i_PlayerEnemy[enemy] == -1 && b_WaitingForEnemy[enemy])
+		{
+			b_WaitingForEnemy[client] 		= false;
+			b_WaitingForEnemy[enemy] 		= false;
+			i_PlayerEnemy[enemy] 			= client;
+			i_PlayerEnemy[client] 			= enemy;
+			return enemy;
+		}
+		else
+			return -1;
+	}
+	
 	int opponent = -1;
 
 	//Check if there is any opponent avalibe without last one
@@ -265,13 +264,8 @@ void SetupMatch(int client, int enemy)
 					count++;
 				}
 			}
-			PrintToConsole(client, "%sFree arenas: %i", PREFIX, count);
-			PrintToConsole(enemy, "%sFree arenas: %i", PREFIX, count);
-			//LogMessage("%N and his opponent %N didnt find free arena, searching for new one!", client, enemy);
 			
 		} else if(arena > 0) {
-			
-			//LogMessage("%N and his opponent %N found free arena %i", client, enemy, arena);
 			
 			//Stop search timers if one of them has one
 			KillSearchTimer(client);
@@ -311,8 +305,6 @@ void SetupMatch(int client, int enemy)
 				customDuelsArray.GetString(randomDuel, randomNames, sizeof(randomNames));
 				//AWP duel setup
 				if(StrEqual(randomNames, "awp")){
-					//PrintCenterText(client, "AWP Duel");
-					//PrintCenterText(enemy, "AWP Duel");
 					g_CustomRoundName[client] = "AWP Duel";
 					g_CustomRoundName[enemy] = "AWP Duel";
 					SetupPlayer(client, enemy, arena, CS_TEAM_T, false);
@@ -323,8 +315,6 @@ void SetupMatch(int client, int enemy)
 				//Flashbang duel setup
 				else if(StrEqual(randomNames, "Fla"))
 				{
-					//PrintCenterText(client, "You spawned with a flashbang");
-					//PrintCenterText(enemy, "You spawned with a flashbang");
 					g_CustomRoundName[client] = "Flashbang Duel";
 					g_CustomRoundName[enemy] = "Flashbang Duel";
 					SetupPlayer(client, enemy, arena, CS_TEAM_T);
@@ -380,7 +370,6 @@ void KillDamageTimer(int arena)
 
 void SetupPlayer(int client, int opponent, int arena, int team, int giveWeapons = true)
 {
-	//LogMessage("teleporting %N to arena %i, his opponent %N | SetupPlayer function", client, arena, opponent);
 
 	//Teleport to arena
 	TeleportToArena(client, team, arena);
@@ -429,7 +418,6 @@ void TeleportToArena(int client, int team, int arena)
 
 public Action ArenaDamageTimer(Handle timer, any arena)
 {
-	//LogMessage("There was no damage in arena %i for 25 seconds", arena);
 	
 	//Set timer to null
 	ArenaDamageTmr[arena] = null;
@@ -452,7 +440,6 @@ public Action ArenaDamageTimer(Handle timer, any arena)
 	
 	if(random == 1)
 	{
-		//LogMessage("Teleporting %N to lobby, because 25sec", player2);
 		TeleportToLobby(player2, true);
 		if(player > 0)
 		{
@@ -460,7 +447,6 @@ public Action ArenaDamageTimer(Handle timer, any arena)
 			SearchTmr[player] = CreateTimer(0.1, PlayerKilled, player, TIMER_FLAG_NO_MAPCHANGE);
 		}
 	} else {
-		//LogMessage("Teleporting %N to lobby, because 25sec", player);
 		TeleportToLobby(player, true);
 		if(player2 > 0)
 		{
@@ -468,8 +454,6 @@ public Action ArenaDamageTimer(Handle timer, any arena)
 			SearchTmr[player2] = CreateTimer(0.1, PlayerKilled, player2, TIMER_FLAG_NO_MAPCHANGE);
 		}
 	}
-	
-	//b_ArenaFree[arena] = true;
 	
 	return Plugin_Handled;
 }

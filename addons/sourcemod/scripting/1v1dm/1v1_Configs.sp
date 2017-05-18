@@ -14,12 +14,15 @@ void Configs_OnPluginStartFunc()
 	g_ShowKillFeedCvar 		= CreateConVar("sm_all_player_killfeed", 	"0", 							"0 will show ony killfeed in top right corner of your own kills, 1 will show all kills", 0, true, 0.0, true, 1.0);
 	g_FlashbangDuelsCvar	= CreateConVar("sm_flashbangduel_enabled", 	"1", 							"Enable flashbang duel", 0, true, 0.0, true, 1.0);
 	g_CustomDuelChanceCvar	= CreateConVar("sm_custom_duel_chance", 	"50", 							"Percentage of possibility to get a custom duel", 0, true, 0.0, true, 100.0);
+	g_ChallengeMinPlayerCvar= CreateConVar("sm_challenge_min_players", 	"4", 							"How many player minumum are necessary to be able to use !challenge or !duel", 0, true, 0.0, true, 32.0);
+	g_ChallengeEnabled		= CreateConVar("sm_challenge_enabled", 		"1", 							"Do you want to enabled !challenge feature", 0, true, 0.0, true, 1.0);
 	
 	//killfeed
 	
 	AutoExecConfig(true, "1v1DM", "sourcemod/1v1DM");
 	
 	HookConVarChange(g_PrefixCvar, PrefixChanged);
+	HookConVarChange(g_ChallengeEnabled, ChallengeChanged);
 	
 	FixPrefix();
 }

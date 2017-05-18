@@ -3,13 +3,13 @@
 	"Rifle:"
 	{
 	  "#format"	"{1:s}"
-		"en"		"Rifle:{1}"
+		"en"		"Rifle: {1}"
 	}
 	
 	"Pistol:"
 	{
 	  "#format"	"{1:s}"
-		"en"		"Pistol:{1}"
+		"en"		"Pistol: {1}"
 	}
 	
 	"Kill sound: On"
@@ -42,8 +42,7 @@
 		"en"		"Flashbang Duels: Off"
 	}
 	
-	
-  "Primary weapon"
+	"Primary weapon"
 	{
 		"en"	"Primary weapon"
 	}
@@ -56,6 +55,81 @@
 	"Weapon preferences"
 	{
 		"en"		"Weapon preferences"
+	}
+	
+	
+	"Not enogh players to start challenge"
+	{
+		"#format"	"{1:i}"
+		"en"		"There are required {1} players to be able to play challenge!"
+	}
+	
+	"Your already in challenge"
+	{
+		"en"		"Your already in challenge, write !stop to stop the challenge"
+	}
+	
+	"Player not found"
+	{
+		"en"		"Player not found!"
+	}
+	
+	"There are several players with this name"
+	{
+		"en"		"Sorry, there are more players with this username!"
+	}
+	
+	"You cant select yourself as enemy"
+	{
+		"en"		"You cant select yourself as enemy!"
+	}
+	
+	"Select opponent"
+	{
+		"en"		"Select opponent"
+	}
+	
+	"Opponent left the game"
+	{
+		"en"		"Sorry, your opponent left the game"
+	}
+	
+	"Opponent in challenge"
+	{
+		"en"		"Sorry, it`s too late, he is already in challenge"
+	}
+	
+	"Challenge is sent"
+	{
+		"#format"	"{1:s}"
+		"en"		"Challenge is sent to {1}"
+	}
+	
+	"Player invited you to challenge"
+	{
+		"#format"	"{1:s}"
+		"en"		"{1} invited you to challenge, write !accept to accept his challenge."
+	}
+	
+	"Invite expired"
+	{
+		"en" 		"Sorry, invite expired!"
+	}
+	
+	"No invites"
+	{
+		"en"		"Sorry, you dont have any invites!"
+	}
+	
+	"You left challenge"
+	{
+		"en"		"You left the challenge!"
+	}
+	
+	"Opponent left the challenge"
+	{
+		"#format"	"{1:s}"
+		"en"		"Your opponent {1} left the challenge!"
 	}
 	
 }

@@ -3,7 +3,7 @@
 #define DEBUG
 
 #define PLUGIN_AUTHOR "boomix"
-#define PLUGIN_VERSION "1.2"
+#define PLUGIN_VERSION "1.3"
 
 #include <sourcemod>
 #include <sdktools>
@@ -29,6 +29,7 @@
 #include "1v1dm/1v1_KillFeed.sp"
 #include "1v1dm/1v1_ShowDamage.sp"
 #include "1v1dm/1v1_FlashbangDuel.sp"
+#include "1v1dm/1v1_Challenge.sp"
 
 #pragma newdecls required
 
@@ -57,6 +58,17 @@ public void OnPluginStart()
 	RegConsoleCmd("sm_weapon", 		CMD_Weapons, 	"Opens up menu with avalible weapons 4");
 	RegConsoleCmd("sm_lobby", 		CMD_Lobby, 		"Teleports player to lobby");
 	
+	//** CHALLANGE **//
+	RegConsoleCmd("sm_challenge", 	CMD_Challenge, 	"Challenge other player/friend");
+	RegConsoleCmd("sm_challange", 	CMD_Challenge, 	"Challenge other player/friend");
+	RegConsoleCmd("sm_chal", 		CMD_Challenge, 	"Challenge other player/friend 2");
+	RegConsoleCmd("sm_c", 			CMD_Challenge, 	"Challenge other player/friend 3");
+	RegConsoleCmd("sm_duel", 		CMD_Challenge, 	"Challenge other player/friend 4");
+	RegConsoleCmd("sm_duels", 		CMD_Challenge, 	"Challenge other player/friend 4");
+	RegConsoleCmd("sm_accept", 		CMD_Accept,		"Accept challange command");
+	RegConsoleCmd("sm_deny", 		CMD_Deny, 		"Deny challange command");
+	RegConsoleCmd("sm_stop", 		CMD_Deny, 		"Stop challange that your inside now");
+	RegConsoleCmd("sm_end", 		CMD_Deny, 		"Stop challange that your inside now 2");
 	
 	//Dev
 	RegConsoleCmd("sm_status", 		CMD_Status);
@@ -118,6 +130,8 @@ public Action CMD_Lobby(int client, int args)
 		
 		
 		TeleportToLobby(client, false);
+		
+		CMD_Deny(client, 0);
 		
 		g_PrimaryWeapon[client] = "";
 		g_SecondaryWeapon[client] = "";

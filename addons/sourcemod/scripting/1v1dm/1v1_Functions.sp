@@ -51,12 +51,14 @@ public void OnClientPutInServer(int client)
 	SDKHook(client, SDKHook_OnTakeDamage, OnTakeDamage);
 	Cookies_OnClientPutInServer(client);
 	ShowDamage_OnClientPutInServer(client);
+	Challenge_OnClientPutInServer(client);
 }
 
 
 public void OnClientDisconnect(int client)
 {
 	Players_OnClientDisconnect(client);
+	Challenge_OnClientDisconnect(client);
 	SDKUnhook(client, SDKHook_OnTakeDamage, OnTakeDamage);
 }
 
