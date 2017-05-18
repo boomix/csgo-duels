@@ -91,8 +91,11 @@ public Action CMD_Weapons(int client, int args)
 
 void ShowMainMenu(int client)
 {
+	SetGlobalTransTarget(client);
 	Menu menu = new Menu(MenuHandlers_MainMenu);
-	menu.SetTitle("Weapon preferences");
+	char Weapon_preferences[64];
+	Format(Weapon_preferences,sizeof(Weapon_preferences),"%T","Weapon preferences",client);
+	menu.SetTitle(Weapon_preferences);
 	
 	//Primary weapon
 	char AddItemChar[50], WeaponName[50];
@@ -101,7 +104,7 @@ void ShowMainMenu(int client)
 	{
 		int rifleID = g_Rifles.FindString(g_PrimaryWeapon[client]);
 		g_Rifles.GetString(rifleID + 1, WeaponName, sizeof(WeaponName));
-		Format(AddItemChar, 50, "Rifle: %s", WeaponName);
+		Format(AddItemChar, 50, "%T","Rifle:",client,WeaponName);
 		menu.AddItem("OpenRifleMenu", AddItemChar);
 	}
 	
@@ -110,15 +113,15 @@ void ShowMainMenu(int client)
 		//Secondary weapon
 		int pistolID = g_Pistols.FindString(g_SecondaryWeapon[client]);
 		g_Pistols.GetString(pistolID + 1, WeaponName, sizeof(WeaponName));
-		Format(AddItemChar, 50, "Pistol: %s", WeaponName);
+		Format(AddItemChar, 50, "%T","Pistol:",client,WeaponName);
 		menu.AddItem("OpenPistolMenu", AddItemChar);
 	}
 	
 	//Kill sound
 	if(b_ClientSoundEnabled[client])
-		Format(AddItemChar, 50, "Kill sound: On");
+		Format(AddItemChar, 50, "%T","Kill sound: On",client);
 	else
-		Format(AddItemChar, 50, "Kill sound: Off");
+		Format(AddItemChar, 50, "%T","Kill sound: Off",client);
 	menu.AddItem("ChangeSound", AddItemChar);
 	
 	
@@ -129,18 +132,18 @@ void ShowMainMenu(int client)
 	if(g_AWPDuelsCvar.IntValue == 1)
 	{
 		if(b_AwpDuelEnabled[client])
-			Format(AddItemChar, 50, "AWP Duels: On");
+			Format(AddItemChar, 50, "%T","AWP Duels: On",client);
 		else
-			Format(AddItemChar, 50, "AWP Duels: Off");
+			Format(AddItemChar, 50, "%T","AWP Duels: Off",client);
 		menu.AddItem("AWPDuel", AddItemChar);
 	}
 	
 	if(g_FlashbangDuelsCvar.IntValue == 1)
 	{
 		if(b_FlashbangDuelEnabled[client])
-			Format(AddItemChar, 50, "Flashbang Duels: On");
+			Format(AddItemChar, 50, "%T","Flashbang Duels: On",client);
 		else
-			Format(AddItemChar, 50, "Flashbang Duels: Off");
+			Format(AddItemChar, 50, "%T","Flashbang Duels: Off",client);
 		menu.AddItem("FlashbangDuel", AddItemChar);
 	}
 	
@@ -187,8 +190,11 @@ void ShowPrimaryWeaponMenu(int client)
 {
 	if(g_EnableRiflesCvar.IntValue == 1)
 	{
+		SetGlobalTransTarget(client);
 		Menu menu = new Menu(MenuHandlers_PrimaryWeapon);
-		menu.SetTitle("Primary weapon");
+		char Primary_weapon[64];
+		Format(Primary_weapon,sizeof(Primary_weapon),"%T","Primary weapon",client);
+		menu.SetTitle(Primary_weapon);
 		
 		for (int i = 0; i < g_Rifles.Length; i+=2)
 		{
@@ -212,8 +218,11 @@ void ShowSecondaryWeaponMenu(int client)
 {
 	if(g_EnablePistolsCvar.IntValue == 1)
 	{
+		SetGlobalTransTarget(client);
 		Menu menu = new Menu(MenuHandlers_SecondaryWeapon);
-		menu.SetTitle("Secondary weapon");
+		char Secondary_Weapon[64];
+		Format(Secondary_Weapon,sizeof(Secondary_Weapon),"%T","Secondary Weapon",client);
+		menu.SetTitle(Secondary_Weapon);
 		
 		for (int i = 0; i < g_Pistols.Length; i+=2)
 		{
