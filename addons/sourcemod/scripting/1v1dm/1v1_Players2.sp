@@ -86,7 +86,11 @@ void Players_OnPlayerDeath(int client, int attacker)
 //----------------------------
 public Action PlayerGotKilled(Handle tmr, any client)
 {
-	if(IsClientInGame(client) && IsInRightTeam(client))
+	
+	if(IsClientInGame(client) && IsInRightTeam(client) && iChallengeEnemy[client] != -1)
+		TeleportToLobby(client, true, true);
+		
+	else if(IsClientInGame(client) && IsInRightTeam(client) && iChallengeEnemy[client] == -1)
 		TeleportToLobby(client, true);
 	
 	return Plugin_Handled;
