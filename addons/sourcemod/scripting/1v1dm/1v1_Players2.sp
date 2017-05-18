@@ -197,7 +197,7 @@ int FindOpponent(int client)
 	LoopAllPlayers(i)
 	{	
 		//If the player fits requirements (Is in lobby, has selected weapons, has no opponent, and is waiting for one)
-		if(i != client && i_PlayerArena[i] == LOBBY && !b_FirstWeaponSelect[i] && i_PlayerEnemy[i] == -1 && b_WaitingForEnemy[i] && i_PrevEnemy[client] != i)
+		if(i != client && i_PlayerArena[i] == LOBBY && !b_FirstWeaponSelect[i] && i_PlayerEnemy[i] == -1 && b_WaitingForEnemy[i] && i_PrevEnemy[client] != i && iChallengeEnemy[i] == -1)
 			AllPlayers2[count2++] = i;
 	}
 	int opponent2 = (count2 == 0) ? -1 : AllPlayers2[GetRandomInt(0, count2 - 1)];
@@ -210,7 +210,7 @@ int FindOpponent(int client)
 		LoopAllPlayers(i)
 		{	
 			//If the player fits requirements (Is in lobby, has selected weapons, has no opponent, and is waiting for one)
-			if(i != client && i_PlayerArena[i] == LOBBY && !b_FirstWeaponSelect[i] && i_PlayerEnemy[i] == -1 && b_WaitingForEnemy[i])
+			if(i != client && i_PlayerArena[i] == LOBBY && !b_FirstWeaponSelect[i] && i_PlayerEnemy[i] == -1 && b_WaitingForEnemy[i] && iChallengeEnemy[i] == -1)
 				AllPlayers[count++] = i;
 		}
 		
@@ -226,7 +226,7 @@ int FindOpponent(int client)
 	//Lets check if that player is still avalible
 	if(opponent > 0)
 	{
-		if(b_WaitingForEnemy[opponent] && i_PlayerEnemy[opponent] == -1 && i_PlayerArena[opponent] == LOBBY){
+		if(b_WaitingForEnemy[opponent] && i_PlayerEnemy[opponent] == -1 && i_PlayerArena[opponent] == LOBBY && iChallengeEnemy[opponent] == -1){
 			
 			//Set the player not avalible anymore
 			b_WaitingForEnemy[client] 		= false;
