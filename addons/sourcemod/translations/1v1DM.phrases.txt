@@ -1,0 +1,62 @@
+"Phrases"
+{
+	"Rifle:"
+	{
+	  "#format"	"{1:s}"
+		"en"		"Rifle:{1}"
+	}
+	
+	"Pistol:"
+	{
+	  "#format"	"{1:s}"
+		"en"		"Pistol:{1}"
+	}
+	
+	"Kill sound: On"
+	{
+		"en"		"Kill sound: On"
+	}
+	
+	"Kill sound: Off"
+	{
+		"en"		"Kill sound: Off"
+	}
+	
+	"AWP Duels: On"
+	{
+		"en"		"AWP Duels: On"
+	}
+	
+	"AWP Duels: Off"
+	{
+		"en"		"AWP Duels: Off"
+	}
+	
+	"Flashbang Duels: On"
+	{
+		"en"		"Flashbang Duels: On"
+	}
+	
+	"Flashbang Duels: Off"
+	{
+		"en"		"Flashbang Duels: Off"
+	}
+	
+	
+  "Primary weapon"
+	{
+		"en"	"Primary weapon"
+	}
+	
+	"Secondary Weapon"
+	{
+		"en"		"Secondary Weapon"
+	}
+	
+	"Weapon preferences"
+	{
+		"en"		"Weapon preferences"
+	}
+	
+}
+
