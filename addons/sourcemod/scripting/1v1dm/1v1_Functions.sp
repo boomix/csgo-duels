@@ -162,6 +162,8 @@ public Action EndRound(Handle tmr, any client)
 	float delay = g_RoundRestartDelayCvar.FloatValue;
 	CS_TerminateRound(delay, CSRoundEnd_TerroristWin);
 	
+	
+	
 	return Plugin_Continue;
 }
 

@@ -3,7 +3,7 @@
 void Spawns_MapStart()
 {
 	
-	CreateTimer(1.0, IfCustomSpawnsAreAdded);
+	CreateTimer(1.0, IfCustomSpawnsAreAdded, _, TIMER_FLAG_NO_MAPCHANGE);
 	//There is 'spawntools7', what creates the spawns bit later
 	
 }
@@ -18,20 +18,21 @@ void ResetArenasArray()
 
 public Action IfCustomSpawnsAreAdded(Handle tmr, any client)
 {
-	if(g_TSpawnsList == null)
+
+	if(g_TSpawnsList != null)
 	{
-		g_TSpawnsList = new ArrayList();
-		g_TAnglesList = new ArrayList();
-		g_CTSpawnsList = new ArrayList();
-		g_CTAnglesList = new ArrayList();
+		CloseNestedList(g_TSpawnsList);
+		CloseNestedList(g_TAnglesList);
+		CloseNestedList(g_CTSpawnsList);
+		CloseNestedList(g_CTAnglesList);
 	}
-	else
-	{
-		g_TSpawnsList.Clear();
-		g_TAnglesList.Clear();
-		g_CTSpawnsList.Clear();
-		g_CTAnglesList.Clear();
-	}
+	
+	g_TSpawnsList = new ArrayList();
+	g_TAnglesList = new ArrayList();
+	g_CTSpawnsList = new ArrayList();
+	g_CTAnglesList = new ArrayList();
+
+	
 	
 	AddTeamSpawns("info_player_terrorist", g_TSpawnsList, g_TAnglesList);
 	AddTeamSpawns("info_player_counterterrorist", g_CTSpawnsList, g_CTAnglesList);
@@ -72,6 +73,18 @@ public Action IfCustomSpawnsAreAdded(Handle tmr, any client)
 	LOBBY = lobbyID;
 	
 	return Plugin_Handled;
+}
+
+void CloseNestedList(ArrayList list) {
+    int n = list.Length;
+    if(list.Length > 0)
+    {
+	    for (int i = 0; i < n; i++) {
+	        ArrayList tmp = view_as<ArrayList>(list.Get(i));
+	        delete tmp;
+	    }
+	    delete list;
+   	}
 }
 
 int GetFreeArena(int prevOne = -1)
@@ -151,12 +164,14 @@ static void AddTeamSpawns(const char[] className, ArrayList spawnList, ArrayList
             
            	}
 
+			
+           	ArrayList spawns = new ArrayList(3);
+           	ArrayList angles = new ArrayList(3);
+			
        		for (int i = 0; i < 64; i++)
        		{
        			if(currentArenaID + 1 > GetArraySize(spawnList))
        			{
-       				ArrayList spawns = new ArrayList(3);
-			    	ArrayList angles = new ArrayList(3);
 			    	iArenaArrayID[currentArenaID] = PushArrayCell(spawnList, spawns);
 			    	PushArrayCell(angleList, angles);
        			} else {
@@ -164,8 +179,8 @@ static void AddTeamSpawns(const char[] className, ArrayList spawnList, ArrayList
        			}
        		}
 			
-       		ArrayList spawns = view_as<ArrayList>(spawnList.Get(currentArenaID));
-       		ArrayList angles = view_as<ArrayList>(angleList.Get(currentArenaID));
+       		spawns = view_as<ArrayList>(spawnList.Get(currentArenaID));
+       		angles = view_as<ArrayList>(angleList.Get(currentArenaID));
        		spawns.PushArray(spawn);
        		angles.PushArray(angle);
 

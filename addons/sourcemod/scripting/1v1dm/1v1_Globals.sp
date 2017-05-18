@@ -17,10 +17,10 @@ char g_CustomRoundName[MAXPLAYERS + 1][50];
 bool b_FirstWeaponSelect[MAXPLAYERS + 1];
 
 //Spawns
-ArrayList g_TSpawnsList = null;
-ArrayList g_TAnglesList = null;
-ArrayList g_CTSpawnsList = null;
-ArrayList g_CTAnglesList = null;
+ArrayList g_TSpawnsList;
+ArrayList g_TAnglesList;
+ArrayList g_CTSpawnsList;
+ArrayList g_CTAnglesList;
 
 ConVar g_RoundRestartDelayCvar;
 
