@@ -58,69 +58,78 @@
 	}
 	
 		
+	"Not enogh players to start challenge"
+	{
+		"#format"	"{1:i}"
+		"chi"		"至少需要 {1} 个玩家 才能开始挑战!"
+	}
+	
 	"Your already in challenge"
 	{
-		"chi"		"Your already in challenge, write !stop to stop the challenge"
+		"chi"		"你已经在挑战, 输入 !stop 停止挑战玩家"
 	}
 	
 	"Player not found"
 	{
-		"chi"		"Player not found!"
+		"chi"		"没有找到玩家!"
 	}
 	
 	"There are several players with this name"
 	{
-		"chi"		"Sorry, there are more players with this username!"
+		"chi"		"对不起,有太多的玩家同名!!"
 	}
 	
 	"You cant select yourself as enemy"
 	{
-		"chi"		"You cant select yourself as enemy!"
+		"chi"		"你不能选择自己为挑战对象!"
 	}
 	
 	"Select opponent"
 	{
-		"chi"		"Select opponent"
+		"chi"		"选择对手"
 	}
 	
 	"Opponent left the game"
 	{
-		"chi"		"Sorry, your opponent left the game"
+		"chi"		"对不起，你的对手离开了比赛"
 	}
 	
 	"Opponent in challenge"
 	{
-		"chi"		"Sorry, it`s too late, he is already in challenge"
+		"chi"		"对不起,你慢了,他已经在挑战其他玩家中了!"
 	}
 	
 	"Challenge is sent"
 	{
-		"chi"		"Challenge is sent to {1}"
+		"#format"	"{1:s}"
+		"chi"		"挑战请求发送到 {1}"
 	}
 	
 	"Player invited you to challenge"
 	{
-		"chi"		"{1} invited you to challenge, write !accept to accept his challenge."
+		"#format"	"{1:s}"
+		"chi"		"{1} 邀请你单挑 输入!accept 以接受."
 	}
 	
 	"Invite expired"
 	{
-		"chi" 		"Sorry, invite expired!"
+		"chi" 		"对不起, 邀请单挑已过期!"
 	}
 	
 	"No invites"
 	{
-		"chi"		"Sorry, you dont have any invites!"
+		"chi"		"对不起，你没有任何单挑邀请!"
 	}
 	
 	"You left challenge"
 	{
-		"chi"		"You left the challenge!"
+		"chi"		"你离开了挑战!"
 	}
 	
 	"Opponent left the challenge"
 	{
-		"chi"		"Your opponent {1} left the challenge!"
+		"#format"	"{1:s}"
+		"chi"		"你的对手 {1} 开了挑战！"
 	}
 	
 }
