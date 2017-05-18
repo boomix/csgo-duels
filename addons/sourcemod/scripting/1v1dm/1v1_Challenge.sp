@@ -189,9 +189,9 @@ void ChallengePlayer(int client, int target)
 	char username[MAX_NAME_LENGTH], username2[MAX_NAME_LENGTH];
 	GetClientName(client, username, sizeof(username));
 	GetClientName(target, username2, sizeof(username2));
-	PrintToChat(client, "%s%T", PREFIX, "Challenge is sent", username2, client);
+	PrintToChat(client, "%s%T", PREFIX, "Challenge is sent", client, username2);
 	PrintToChat(target, " ");
-	PrintToChat(target, "%s%T", PREFIX, "Player invited you to challeng", username, target);
+	PrintToChat(target, "%s%T", PREFIX, "Player invited you to challeng", target, username);
 	PrintToChat(target, " ");
 	
 }
