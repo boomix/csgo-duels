@@ -201,6 +201,7 @@ public Action CMD_Say(int client, const char[] command, int argc)
 
 public Action CMD_Spawn(int client, int args)
 {
+	
 	char arena[10];
 	float org[3], ang[3];
 	GetCmdArg(1, arena, sizeof(arena));

@@ -76,7 +76,6 @@ void WeaponMenu_MapStart()
 	delete kv;
 	
 	//PrintToServer("RIFLES: %i | PISTOLS: %i", g_Rifles.Length, g_Pistols.Length);
-
 }
 
 public Action CMD_Weapons(int client, int args)

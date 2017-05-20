@@ -17,10 +17,10 @@ char g_CustomRoundName[MAXPLAYERS + 1][50];
 bool b_FirstWeaponSelect[MAXPLAYERS + 1];
 
 //Spawns
-ArrayList g_TSpawnsList = null;
-ArrayList g_TAnglesList = null;
-ArrayList g_CTSpawnsList = null;
-ArrayList g_CTAnglesList = null;
+ArrayList g_TSpawnsList;
+ArrayList g_TAnglesList;
+ArrayList g_CTSpawnsList;
+ArrayList g_CTAnglesList;
 
 ConVar g_RoundRestartDelayCvar;
 
@@ -35,7 +35,6 @@ bool b_FirstTeamJoin[MAXPLAYERS + 1] = true;
 int i_PrevArena[MAXPLAYERS + 1];
 int i_PlayerEnemy[MAXPLAYERS + 1];
 int i_PrevEnemy[MAXPLAYERS + 1];
-int iArenaArrayID[64] = -1;
 int g_offsCollisionGroup;
 
 int g_roundStartedTime = -1;
