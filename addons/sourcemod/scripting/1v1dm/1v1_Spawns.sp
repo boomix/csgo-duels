@@ -153,7 +153,7 @@ static void AddTeamSpawns(const char[] className, ArrayList spawnList, ArrayList
             
            	}
 
-        	AddSpawn2(currentArenaID, spawn, angle, spawnList, angleList, spawnName);
+        	AddSpawn2(currentArenaID, spawn, angle, spawnList, angleList);
 
       	} else {
         	AddSpawn(spawn, angle, spawnList, angleList);
@@ -162,7 +162,7 @@ static void AddTeamSpawns(const char[] className, ArrayList spawnList, ArrayList
     
 }
 
-static void AddSpawn2(int arena, float spawn[3], float angle[3], ArrayList spawnList, ArrayList angleList, char spawnName[100])
+static void AddSpawn2(int arena, float spawn[3], float angle[3], ArrayList spawnList, ArrayList angleList)
 {
 	if(arena < GetArraySize(spawnList))
 	{
@@ -177,7 +177,7 @@ static void AddSpawn2(int arena, float spawn[3], float angle[3], ArrayList spawn
 		ArrayList angles = new ArrayList(3);
 		PushArrayCell(spawnList, spawns);
 		PushArrayCell(angleList, angles);
-		AddSpawn2(arena, spawn, angle, spawnList, angleList, spawnName);
+		AddSpawn2(arena, spawn, angle, spawnList, angleList);
 		
 	}
 }
