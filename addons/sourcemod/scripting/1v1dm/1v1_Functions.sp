@@ -174,7 +174,11 @@ public int GetTotalRoundTime()
 
 public int GetCurrentRoundTime() 
 {
-	Handle h_freezeTime = FindConVar("mp_freezetime");
+	static Handle h_freezeTime = null;
+	
+	if(h_freezeTime == null)
+		h_freezeTime = FindConVar("mp_freezetime");
+	
 	int freezeTime = GetConVarInt(h_freezeTime);
 	return (GetTime() - g_roundStartedTime) - freezeTime;
 }

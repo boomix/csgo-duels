@@ -2,37 +2,23 @@
 
 void Spawns_MapStart()
 {
-	
 	CreateTimer(1.0, IfCustomSpawnsAreAdded, _, TIMER_FLAG_NO_MAPCHANGE);
 	//There is 'spawntools7', what creates the spawns bit later
 	
 }
 
-void ResetArenasArray()
-{
-	for (int i = 0; i < 64; i++)
-	{
-		iArenaArrayID[i] = -1;
-	}
-}
 
 public Action IfCustomSpawnsAreAdded(Handle tmr, any client)
 {
-
-	if(g_TSpawnsList != null)
-	{
-		CloseNestedList(g_TSpawnsList);
-		CloseNestedList(g_TAnglesList);
-		CloseNestedList(g_CTSpawnsList);
-		CloseNestedList(g_CTAnglesList);
-	}
+	CloseNestedList(g_TSpawnsList);
+	CloseNestedList(g_TAnglesList);
+	CloseNestedList(g_CTSpawnsList);
+	CloseNestedList(g_CTAnglesList);
 	
 	g_TSpawnsList = new ArrayList();
 	g_TAnglesList = new ArrayList();
 	g_CTSpawnsList = new ArrayList();
 	g_CTAnglesList = new ArrayList();
-
-	
 	
 	AddTeamSpawns("info_player_terrorist", g_TSpawnsList, g_TAnglesList);
 	AddTeamSpawns("info_player_counterterrorist", g_CTSpawnsList, g_CTAnglesList);
@@ -76,15 +62,20 @@ public Action IfCustomSpawnsAreAdded(Handle tmr, any client)
 }
 
 void CloseNestedList(ArrayList list) {
-    int n = list.Length;
-    if(list.Length > 0)
-    {
-	    for (int i = 0; i < n; i++) {
-	        ArrayList tmp = view_as<ArrayList>(list.Get(i));
-	        delete tmp;
-	    }
-	    delete list;
-   	}
+	if(list == null)
+		return;
+	
+	int n = list.Length;
+	if(list.Length > 0)
+	{
+		for (int i = 0; i < n; i++) {
+			ArrayList list2 = view_as<ArrayList>(list.Get(i));
+			if(list2 != null)
+			delete list2;
+		}
+	}
+	delete list;
+	list = null;
 }
 
 int GetFreeArena(int prevOne = -1)
@@ -134,8 +125,6 @@ int GetFreeArena(int prevOne = -1)
 //Function from multi1v1
 static void AddTeamSpawns(const char[] className, ArrayList spawnList, ArrayList angleList) {
 	
-    ResetArenasArray();
-    
     float spawn[3];
     float angle[3];
 	
@@ -164,33 +153,33 @@ static void AddTeamSpawns(const char[] className, ArrayList spawnList, ArrayList
             
            	}
 
-			
-           	ArrayList spawns = new ArrayList(3);
-           	ArrayList angles = new ArrayList(3);
-			
-       		for (int i = 0; i < 64; i++)
-       		{
-       			if(currentArenaID + 1 > GetArraySize(spawnList))
-       			{
-			    	iArenaArrayID[currentArenaID] = PushArrayCell(spawnList, spawns);
-			    	PushArrayCell(angleList, angles);
-       			} else {
-       				iArenaArrayID[currentArenaID] = currentArenaID;
-       			}
-       		}
-			
-       		spawns = view_as<ArrayList>(spawnList.Get(currentArenaID));
-       		angles = view_as<ArrayList>(angleList.Get(currentArenaID));
-       		spawns.PushArray(spawn);
-       		angles.PushArray(angle);
+        	AddSpawn2(currentArenaID, spawn, angle, spawnList, angleList, spawnName);
 
       	} else {
-    		
         	AddSpawn(spawn, angle, spawnList, angleList);
-        
        	}
     }
     
+}
+
+static void AddSpawn2(int arena, float spawn[3], float angle[3], ArrayList spawnList, ArrayList angleList, char spawnName[100])
+{
+	if(arena < GetArraySize(spawnList))
+	{
+		ArrayList spawns = view_as<ArrayList>(spawnList.Get(arena));
+		ArrayList angles = view_as<ArrayList>(angleList.Get(arena));
+		spawns.PushArray(spawn);
+		angles.PushArray(angle);
+		
+	} else {
+
+		ArrayList spawns = new ArrayList(3);
+		ArrayList angles = new ArrayList(3);
+		PushArrayCell(spawnList, spawns);
+		PushArrayCell(angleList, angles);
+		AddSpawn2(arena, spawn, angle, spawnList, angleList, spawnName);
+		
+	}
 }
 
 
@@ -223,7 +212,6 @@ static void AddSpawn(float spawn[3], float angle[3], ArrayList spawnList, ArrayL
     spawns.PushArray(spawn);
     angles.PushArray(angle);
     PushArrayCell(spawnList, spawns);
-    //PrintToServer("lobby: %i", arrays);
     PushArrayCell(angleList, angles);
 }
 
@@ -247,7 +235,7 @@ stock int NearestNeighborIndex(const float vec[3], ArrayList others) {
     return closestIndex;
 }
 
-int GetArenaSpawn(int arena, int team, float origin[3], float angle[3]) {
+void GetArenaSpawn(int arena, int team, float origin[3], float angle[3]) {
 
     CHECK_ARENA(arena);
     
@@ -267,9 +255,5 @@ int GetArenaSpawn(int arena, int team, float origin[3], float angle[3]) {
         int index = GetRandomInt(0, count - 1);
         GetArrayArray(spawns, index, origin);
         GetArrayArray(angles, index, angle);
-	
-        return index;
     }
-   
-    return -1;
 }

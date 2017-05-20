@@ -336,7 +336,6 @@ void SetupMatch(int client, int enemy)
 			
 			}
 			
-			customDuelsArray.Clear();
 			delete customDuelsArray;
 			
 			//Create new duel if there is no damage in 25 seconds
