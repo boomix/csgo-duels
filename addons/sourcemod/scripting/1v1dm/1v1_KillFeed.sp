@@ -21,7 +21,8 @@ void KillFeed_PlayerDeath(int victim, int attacker, char sWeapon[128], bool head
 		if(IsValidK && victim != attacker)
 		   event.FireToClient(attacker);
 
-		delete event;
+		event.Cancel();
+		
 	}
 }
 
