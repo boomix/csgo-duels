@@ -86,13 +86,11 @@ public void OnPluginStart()
 	HookEvent("player_spawn", 		Event_OnPlayerSpawn);
 	HookEvent("player_team", 		Event_OnPlayerTeam);
 	HookEvent("player_death", 		Event_OnPlayerDeath, 	EventHookMode_Pre);
-	HookEvent("player_team", 		Event_OnPlayerTeam2, 	EventHookMode_Pre);
 	HookEvent("player_hurt", 		Event_PlayerHurt, 		EventHookMode_Pre);
 	
 	//Command listners
 	AddCommandListener(BlockKill, 		"kill");
 	AddCommandListener(BlockKill, 		"explode");
-	AddCommandListener(Event_JoinTeam, 	"jointeam");
 	
 	//Blood thing
 	AddTempEntHook("World Decal", TE_OnWorldDecal);
@@ -212,11 +210,6 @@ public Action CMD_Spawn(int client, int args)
 	TeleportEntity(client, org, ang, NULL_VECTOR);
 }
 
-public Action Event_OnPlayerTeam2(Handle event, const char[] name, bool dontBroadcast)
-{
-	return (Plugin_Handled);
-}
-
 void hud_message(int client, char message[500]) 
 {
 	Format(message, sizeof(message), "%s\n%s", message, g_CustomRoundName[client]);
@@ -244,12 +237,4 @@ void hud_message(int client, char message[500])
 public Action BlockKill(int client, const char[] command, int args)
 {
 	return Plugin_Handled;
-}  
-
-public Action Event_JoinTeam(int client, const char[] command, int arg)
-{
-	if(IsPlayerAlive(client))
-		return Plugin_Handled;	
-	else
-		return Plugin_Continue;
-}
+} 

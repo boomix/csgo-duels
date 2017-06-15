@@ -418,7 +418,24 @@ void TeleportToArena(int client, int team, int arena)
 	GetArenaSpawn(arena, team, org, ang);
 	TeleportEntity(client, org, ang, vec);
 	SetEntData(client, g_offsCollisionGroup, 5, 4, true);
+	
+	//Add small amount of freeze time
+	//CreateTimer(1.0, MoveTypeFix, client, TIMER_FLAG_NO_MAPCHANGE);
+	//SetEntityMoveType(client, MOVETYPE_NONE);
 }
+
+/*public Action MoveTypeFix(Handle tmr, any client)
+{
+	if(client > 0)
+	{
+		if(IsClientInGame(client))
+		{
+			SetEntityMoveType(client, MOVETYPE_WALK);
+		}
+	}
+		
+	return Plugin_Handled;
+}*/
 
 public Action ArenaDamageTimer(Handle timer, any arena)
 {

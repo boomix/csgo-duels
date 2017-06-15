@@ -86,7 +86,9 @@ public Action Event_OnPlayerTeam(Event event, const char[] name, bool dontBroadc
 		if(i_PlayerEnemy[client] > 0 && IsClientInGame(i_PlayerEnemy[client]) && i_PlayerEnemy[i_PlayerEnemy[client]] == client)
 		{
 			TeleportToLobby(i_PlayerEnemy[client], true, true);
-			TeleportToLobby(client, true);
+			
+			if(team != CS_TEAM_SPECTATOR)
+				TeleportToLobby(client, true);
 		}
 	}
 	
