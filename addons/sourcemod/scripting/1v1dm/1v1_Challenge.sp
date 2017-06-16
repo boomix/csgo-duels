@@ -2,6 +2,7 @@ void Challenge_OnClientPutInServer(int client)
 {
 	iChallengeEnemy[client] = -1;
 	iChallengeInvite[client] = -1;
+	ChallengeTmrInvite[client] = null;
 }
 
 void Challenge_OnClientDisconnect(int client)
@@ -210,16 +211,29 @@ public Action RemoveInvite(Handle tmr, any userID)
 	int client = GetClientOfUserId(userID);
 	if(client > 0)
 	{
-		ChallengeTmrInvite[client] = null;
 		if(IsClientInGame(client))
 		{
+			ChallengeTmrInvite[client] = null;
 			int opponent = iChallengeInvite[client];
-			if(iChallengeEnemy[opponent] != client)
+			
+			if(opponent > 0) 
 			{
-				iChallengeInvite[client] = -1;
-				PrintToChat(client, "%s%T", PREFIX, "Invite expired", client);
-				PrintToChat(opponent, "%s%T", PREFIX, "Invite expired", opponent);
-			}			
+				if(IsClientInGame(opponent))
+				{
+			
+					if(iChallengeEnemy[opponent] != client)
+					{
+						iChallengeInvite[client] = -1;
+						PrintToChat(client, "%s%T", PREFIX, "Invite expired", client);
+						PrintToChat(opponent, "%s%T", PREFIX, "Invite expired", opponent);	
+					}
+			
+				} else {
+					iChallengeInvite[client] = -1;
+					PrintToChat(client, "%s%T", PREFIX, "Invite expired", client);
+				}
+			}
+			
 		}
 	}
 		
