@@ -98,6 +98,16 @@ public void OnPluginStart()
 	
 	g_offsCollisionGroup 	= FindSendPropInfo("CBaseEntity", "m_CollisionGroup");
 	LoadTranslations("1v1DM.phrases");
+		
+	LoopAllPlayers(i)
+	{
+		WeaponMenu_OnClientPutInServer(i);
+		Players_OnClientPutInServer(i);
+		SDKHook(i, SDKHook_OnTakeDamage, OnTakeDamage);
+		Cookies_OnClientPutInServer(i);
+		ShowDamage_OnClientPutInServer(i);	
+		CMD_Lobby(i, 0);
+	}
 
 }
 
