@@ -20,6 +20,6 @@ http://www.gametracker.com/search/?search_by=map&query=duels_&sort=3&order=DESC&
 * Download all the files
 * Download ['modified_spawntools.7z'](https://forums.alliedmods.net/attachment.php?attachmentid=162658&d=1494187104)
 * Extract all the files inside right paths.
-* Host workshop maps - https://steamcommunity.com/sharedfil.../?id=810773843
+* Host workshop maps - https://steamcommunity.com/sharedfiles/filedetails/?id=810773843
 * Set max slot limit to 16
 * Your done
