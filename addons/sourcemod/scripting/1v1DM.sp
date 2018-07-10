@@ -3,7 +3,7 @@
 #define DEBUG
 
 #define PLUGIN_AUTHOR "boomix"
-#define PLUGIN_VERSION "1.3"
+#define PLUGIN_VERSION "1.31"
 
 #include <sourcemod>
 #include <sdktools>

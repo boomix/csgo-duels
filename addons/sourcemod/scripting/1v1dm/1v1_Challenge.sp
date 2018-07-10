@@ -150,8 +150,9 @@ public int MenuHandlers_Challenge(Menu menu, MenuAction action, int client, int 
 			GetMenuItem(menu, item, ctarget, sizeof(ctarget));
 			int target = GetClientOfUserId(StringToInt(ctarget));
 			
-			if(IsClientInGame(target))
-				ChallengePlayer(client, target);
+			if(target > 0)
+				if(IsClientInGame(target))
+					ChallengePlayer(client, target);
 			
 		}
 		
