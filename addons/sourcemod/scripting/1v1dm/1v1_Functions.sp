@@ -42,24 +42,28 @@ public Action Event_OnRoundPostStart(Event event, const char[] name, bool dontBr
 public void OnClientPutInServer(int client)
 {
 	//Kick bots
-	if(IsFakeClient(client))
+	if(IsFakeClient(client) && !IsClientSourceTV(client))
 		ServerCommand("bot_kick");
 	
-	WeaponMenu_OnClientPutInServer(client);
-	Players_OnClientPutInServer(client);
-	PlayerFirstJoin_OnClientPutInServer(client);
-	SDKHook(client, SDKHook_OnTakeDamage, OnTakeDamage);
-	Cookies_OnClientPutInServer(client);
-	ShowDamage_OnClientPutInServer(client);
-	Challenge_OnClientPutInServer(client);
+	if(!IsFakeClient(client) && !IsClientSourceTV(client)) {
+		WeaponMenu_OnClientPutInServer(client);
+		Players_OnClientPutInServer(client);
+		PlayerFirstJoin_OnClientPutInServer(client);
+		SDKHook(client, SDKHook_OnTakeDamage, OnTakeDamage);
+		Cookies_OnClientPutInServer(client);
+		ShowDamage_OnClientPutInServer(client);
+		Challenge_OnClientPutInServer(client);
+	}
 }
 
 
 public void OnClientDisconnect(int client)
 {
-	Players_OnClientDisconnect(client);
-	Challenge_OnClientDisconnect(client);
-	SDKUnhook(client, SDKHook_OnTakeDamage, OnTakeDamage);
+	if(!IsClientSourceTV(client)) {
+		Players_OnClientDisconnect(client);
+		Challenge_OnClientDisconnect(client);
+		SDKUnhook(client, SDKHook_OnTakeDamage, OnTakeDamage);
+	}
 }
 
 public Action Event_OnPlayerSpawn(Event event, const char[] name, bool dontBroadcast) 
@@ -75,7 +79,7 @@ public Action Event_OnPlayerTeam(Event event, const char[] name, bool dontBroadc
 {
 	int client 	= GetClientOfUserId(event.GetInt("userid"));
 	int team 	= event.GetInt("team");
-	if(!IsFakeClient(client))
+	if(!IsFakeClient(client) && !IsClientSourceTV(client))
 	{
 		//Players_OnPlayerTeam(client);
 		Cookies_OnPlayerTeam(client);
