@@ -56,6 +56,8 @@ public Action IfCustomSpawnsAreAdded(Handle tmr, any client)
 		}
 	}
 	
+	PrintToServer("ARENAS: %i", g_maxArenas);
+	
 	LOBBY = lobbyID;
 	
 	return Plugin_Handled;

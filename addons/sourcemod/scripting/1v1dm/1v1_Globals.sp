@@ -87,3 +87,8 @@ ConVar g_Timelimit;
 int iChallengeEnemy[MAXPLAYERS + 1];
 int iChallengeInvite[MAXPLAYERS + 1];
 Handle ChallengeTmrInvite[MAXPLAYERS + 1];
+
+bool b_isAFK[MAXPLAYERS + 1];
+float fLastPos[MAXPLAYERS + 1][3];
+
+int wins[MAXPLAYERS + 1];

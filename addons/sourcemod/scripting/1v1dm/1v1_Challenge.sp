@@ -215,12 +215,16 @@ public Action RemoveInvite(Handle tmr, any userID)
 		if(IsClientInGame(client))
 		{
 			int opponent = iChallengeInvite[client];
-			if(iChallengeEnemy[opponent] != client)
-			{
-				iChallengeInvite[client] = -1;
-				PrintToChat(client, "%s%T", PREFIX, "Invite expired", client);
+			if(opponent > 0 && opponent < MaxClients && IsClientInGame(opponent)) {
 				PrintToChat(opponent, "%s%T", PREFIX, "Invite expired", opponent);
-			}			
+			
+				if(iChallengeEnemy[opponent] != client)
+				{
+					iChallengeInvite[client] = -1;
+					PrintToChat(client, "%s%T", PREFIX, "Invite expired", client);
+				}	
+
+			}		
 		}
 	}
 		

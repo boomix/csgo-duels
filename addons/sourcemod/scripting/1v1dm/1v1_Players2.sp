@@ -171,6 +171,9 @@ void TeleportToLobby(int client, bool searchEnable, bool ImSearching = false)
 				KillSearchTimer(client);
 				SearchTmr[client] = CreateTimer(0.1, PlayerKilled, client, TIMER_FLAG_NO_MAPCHANGE);
 			}
+			
+			//Set entity as ghost if in lobby
+			SetEntProp(client, Prop_Send, "m_bNightVisionOn", 1);
 				
 		}
 	}
@@ -201,7 +204,7 @@ int FindOpponent(int client)
 	LoopAllPlayers(i)
 	{	
 		//If the player fits requirements (Is in lobby, has selected weapons, has no opponent, and is waiting for one)
-		if(i != client && i_PlayerArena[i] == LOBBY && !b_FirstWeaponSelect[i] && i_PlayerEnemy[i] == -1 && b_WaitingForEnemy[i] && i_PrevEnemy[client] != i && iChallengeEnemy[i] == -1)
+		if(i != client && i_PlayerArena[i] == LOBBY && !b_isAFK[i] && !b_FirstWeaponSelect[i] && i_PlayerEnemy[i] == -1 && b_WaitingForEnemy[i] && i_PrevEnemy[client] != i && iChallengeEnemy[i] == -1)
 			AllPlayers2[count2++] = i;
 	}
 	int opponent2 = (count2 == 0) ? -1 : AllPlayers2[GetRandomInt(0, count2 - 1)];
@@ -213,8 +216,8 @@ int FindOpponent(int client)
 		int AllPlayers[MAXPLAYERS + 1], count;
 		LoopAllPlayers(i)
 		{	
-			//If the player fits requirements (Is in lobby, has selected weapons, has no opponent, and is waiting for one)
-			if(i != client && i_PlayerArena[i] == LOBBY && !b_FirstWeaponSelect[i] && i_PlayerEnemy[i] == -1 && b_WaitingForEnemy[i] && iChallengeEnemy[i] == -1)
+			//If the player fits requirements (Is in lobby, has selected weapons, has no opponent, and is waiting for one and is not afk)
+			if(i != client && i_PlayerArena[i] == LOBBY && !b_isAFK[i] && !b_FirstWeaponSelect[i] && i_PlayerEnemy[i] == -1 && b_WaitingForEnemy[i] && iChallengeEnemy[i] == -1)
 				AllPlayers[count++] = i;
 		}
 		
@@ -230,7 +233,7 @@ int FindOpponent(int client)
 	//Lets check if that player is still avalible
 	if(opponent > 0)
 	{
-		if(b_WaitingForEnemy[opponent] && i_PlayerEnemy[opponent] == -1 && i_PlayerArena[opponent] == LOBBY && iChallengeEnemy[opponent] == -1){
+		if(b_WaitingForEnemy[opponent] && i_PlayerEnemy[opponent] == -1 && i_PlayerArena[opponent] == LOBBY && iChallengeEnemy[opponent] == -1 && !b_isAFK[opponent]){
 			
 			//Set the player not avalible anymore
 			b_WaitingForEnemy[client] 		= false;
@@ -409,6 +412,9 @@ void SetupPlayer(int client, int opponent, int arena, int team, int giveWeapons 
 		GetClientName(opponent, username, sizeof(username));
 		hud_message(client, username);
 	}
+	
+	//AFK manager, to check if anyone is afk
+	AFK_MatchStarted(client, opponent);
 }
 
 
@@ -418,6 +424,9 @@ void TeleportToArena(int client, int team, int arena)
 	GetArenaSpawn(arena, team, org, ang);
 	TeleportEntity(client, org, ang, vec);
 	SetEntData(client, g_offsCollisionGroup, 5, 4, true);
+	
+	//Remove lobby effect
+	SetEntProp(client, Prop_Send, "m_bNightVisionOn", 0);
 }
 
 public Action ArenaDamageTimer(Handle timer, any arena)

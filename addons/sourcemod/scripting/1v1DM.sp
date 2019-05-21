@@ -10,6 +10,7 @@
 #include <cstrike>
 #include <sdkhooks>
 #include <clientprefs>
+#include <geoip>
 
 
 //File includes
@@ -30,6 +31,8 @@
 #include "1v1dm/1v1_ShowDamage.sp"
 #include "1v1dm/1v1_FlashbangDuel.sp"
 #include "1v1dm/1v1_Challenge.sp"
+#include "1v1dm/1v1_AFK.sp"
+#include "1v1dm/1v1_Tags.sp"
 
 #pragma newdecls required
 
@@ -43,6 +46,8 @@ public Plugin myinfo =
 	version = PLUGIN_VERSION,
 	url = "http://identy.lv"
 };
+
+
 
 public void OnPluginStart()
 {
@@ -69,6 +74,7 @@ public void OnPluginStart()
 	RegConsoleCmd("sm_deny", 		CMD_Deny, 		"Deny challange command");
 	RegConsoleCmd("sm_stop", 		CMD_Deny, 		"Stop challange that your inside now");
 	RegConsoleCmd("sm_end", 		CMD_Deny, 		"Stop challange that your inside now 2");
+	RegConsoleCmd("sm_howmanyfuckingarenasareinthismap", 		CMD_Arenas, 		"Arena count");
 	
 	//Dev
 	RegConsoleCmd("sm_status", 		CMD_Status);
@@ -88,6 +94,7 @@ public void OnPluginStart()
 	HookEvent("player_death", 		Event_OnPlayerDeath, 	EventHookMode_Pre);
 	HookEvent("player_team", 		Event_OnPlayerTeam2, 	EventHookMode_Pre);
 	HookEvent("player_hurt", 		Event_PlayerHurt, 		EventHookMode_Pre);
+	HookEvent("player_connect_full",Event_PlayerConnect);  
 	
 	//Command listners
 	AddCommandListener(BlockKill, 		"kill");
@@ -101,6 +108,12 @@ public void OnPluginStart()
 	g_offsCollisionGroup 	= FindSendPropInfo("CBaseEntity", "m_CollisionGroup");
 	LoadTranslations("1v1DM.phrases");
 
+}
+
+public Action CMD_Arenas(int client, int args)
+{
+	ReplyToCommand(client, "[FastArena1337] There are %i fucking arenas ejziponken!", g_maxArenas);
+	return Plugin_Handled;	
 }
 
 public Action CMD_Lobby(int client, int args)

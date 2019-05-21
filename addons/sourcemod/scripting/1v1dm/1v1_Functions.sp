@@ -9,12 +9,30 @@ public void OnPluginStartFunc()
 
 public void OnMapStart()
 {
+	
+	//To hide team select
+	GameRules_SetProp("m_bIsQueuedMatchmaking", 1); // remove team menu
 	g_RoundRestartDelayCvar = FindCvarAndLogError("mp_round_restart_delay");
 	WeaponMenu_MapStart();
 	Spawns_MapStart();
-	Cvars_MapStart();
+	Cvars_OnConfigsExecuted();
 }
 
+//Auto put player in team
+public void Event_PlayerConnect(Event event, const char[] name, bool dontBroadcast) 
+{
+	int client = GetClientOfUserId(event.GetInt("userid"));
+	int T = 0, CT = 0;
+	for (int i = 1; i < MaxClients; i++) {
+		if(IsClientInGame(i)) {
+			if(GetClientTeam(i) == CS_TEAM_CT)
+				CT++;
+			else if(GetClientTeam(i) == CS_TEAM_T)
+				T++;
+		} 
+	}
+	ChangeClientTeam(client, ((T > CT) ? CS_TEAM_CT : CS_TEAM_T));
+}
 
 public void OnConfigsExecuted() 
 {
@@ -31,8 +49,6 @@ public Action Event_RoundStart(Handle event, const char[] name, bool dontBroadca
 
 public Action Event_OnRoundPostStart(Event event, const char[] name, bool dontBroadcast) 
 {
-	SetCvar("mp_autoteambalance",				"0"); 
-	SetCvar("mp_ignore_round_win_conditions", 	"1");
 	g_Timelimit = FindCvarAndLogError("mp_timelimit");
 	GameRules_SetProp("m_iRoundTime", g_Timelimit.IntValue * 60, 4, 0, true);
 	
@@ -45,7 +61,7 @@ public void OnClientPutInServer(int client)
 	if(IsFakeClient(client) && !IsClientSourceTV(client))
 		ServerCommand("bot_kick");
 	
-	if(!IsFakeClient(client) && !IsClientSourceTV(client)) {
+	if(!IsFakeClient(client) && !IsClientSourceTV(client) && client > 0) {
 		WeaponMenu_OnClientPutInServer(client);
 		Players_OnClientPutInServer(client);
 		PlayerFirstJoin_OnClientPutInServer(client);
@@ -53,6 +69,8 @@ public void OnClientPutInServer(int client)
 		Cookies_OnClientPutInServer(client);
 		ShowDamage_OnClientPutInServer(client);
 		Challenge_OnClientPutInServer(client);
+		AFK_OnClientPutInServer(client);
+		Tags_OnClientPutInServer(client);
 	}
 }
 
@@ -70,6 +88,7 @@ public Action Event_OnPlayerSpawn(Event event, const char[] name, bool dontBroad
 {
 	int client = GetClientOfUserId(event.GetInt("userid"));
 	HideRadar_OnPlayerSpawn(client);
+	Tags_OnPlayerSpawn(client);
 	//Players2_OnPlayerSpawn(client);
 	
 	return Plugin_Continue;
@@ -115,6 +134,7 @@ public Action Event_OnPlayerDeath(Event event, const char[] name, bool dontBroad
 	Players_OnPlayerDeath(client, attacker);
 	KillSound_OnPlayerDeath(attacker);
 	ShowDamage_OnPlayerDeath(client, attacker);
+	Tags_OnPlayerDeath(client, attacker);
 	
 	//Hide killfeed
 	bool headshot 	= GetEventBool(event, "headshot", false);
@@ -150,6 +170,10 @@ public Action OnTakeDamage(int victim, int &attacker, int &inflictor, float &dam
 
 public void OnGameFrame()
 {
+	//Disable warmup completley
+	if(GameRules_GetProp("m_bWarmupPeriod") == 1)
+		GameRules_SetProp("m_bWarmupPeriod", 0);
+	
 	if(b_NullOnce)
 	{
 		if(GetTotalRoundTime() == GetCurrentRoundTime())
