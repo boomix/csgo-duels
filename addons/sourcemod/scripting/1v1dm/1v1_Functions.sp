@@ -71,6 +71,7 @@ public void OnClientPutInServer(int client)
 		Challenge_OnClientPutInServer(client);
 		AFK_OnClientPutInServer(client);
 		Tags_OnClientPutInServer(client);
+		AntiCheat_OnClientPutInServer(client);
 	}
 }
 
