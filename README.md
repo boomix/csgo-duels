@@ -1,4 +1,20 @@
-# CS:GO DUELS
+# THIS IS EXPERIMENTAL!
+
+This is a fork of the Duels plugin from Boomix\
+This fork **ATTEMPTS** to fix this plugin causing false positives for Little Anti-Cheat by utilizing the forwards Lilac provides.
+
+The only changes I've made is:
+1. Changing all `TeleportEntity()` calls to `TeleportEntitySafe()`.
+2. Adding *1v1dm/1v1_AntiCheat.sp*, where the `TeleportEntitySafe()` function lies.
+
+TeleportEntitySafe() simply calls TeleportEntity() and flags players teleported as having recently teleported.\
+If a player is then detected of using Aimlock or Aimbot - it will then block that detection.
+
+## This Fork may have issues, bugs or problems!
+
+---
+
+## CS:GO DUELS
 Gamemode for CS:GO what mix deathmatch + 1v1 gamemode
 ***
 ## About duels
