@@ -87,7 +87,7 @@ public Action FirstJoin(Handle tmr, any client)
 		//Teleport to lobby
 		float org[3], ang[3];
 		GetArenaSpawn(LOBBY, GetClientTeam(client), org, ang);
-		TeleportEntity(client, org, ang, NULL_VECTOR);
+		TeleportEntitySafe(client, org, ang, NULL_VECTOR);
 		
 		//Show weapon menu
 		ShowPrimaryWeaponMenu(client);	
@@ -119,7 +119,7 @@ void TeleportToLobby(int client)
 	{
 		float org[3], ang[3];
 		GetArenaSpawn(LOBBY, GetClientTeam(client), org, ang);
-		TeleportEntity(client, org, ang, NULL_VECTOR);
+		TeleportEntitySafe(client, org, ang, NULL_VECTOR);
 		i_PlayerArena[client] = LOBBY;
 	}
 }
@@ -280,7 +280,7 @@ void SetupPlayer(int client, int client2, int arena, int team)
 	//Teleport to arena
 	float org[3], ang[3];
 	GetArenaSpawn(arena, team, org, ang);
-	TeleportEntity(client, org, ang, NULL_VECTOR);
+	TeleportEntitySafe(client, org, ang, NULL_VECTOR);
 	
 	//Give player his own weapons
 	int weapon = GetPlayerWeaponSlot(client, CS_SLOT_PRIMARY);
