@@ -12,7 +12,7 @@ void PlayersFirstJoin_OnPlayerTeam(int client, int team)
 			//Spawntools are weird, we want to force player to be in lobby
 			float org[3], ang[3];
 			GetArenaSpawn(LOBBY, GetClientTeam(client), org, ang);
-			TeleportEntity(client, org, ang, NULL_VECTOR);
+			TeleportEntitySafe(client, org, ang, NULL_VECTOR);
 			CreateTimer(0.1, Telepors, client, TIMER_FLAG_NO_MAPCHANGE);
 			
 			CreateTimer(0.5, FirstJoin, client, TIMER_FLAG_NO_MAPCHANGE);
@@ -27,7 +27,7 @@ public Action Telepors(Handle tmr, any client)
 	{
 		float org[3], ang[3];
 		GetArenaSpawn(LOBBY, GetClientTeam(client), org, ang);
-		TeleportEntity(client, org, ang, NULL_VECTOR);
+		TeleportEntitySafe(client, org, ang, NULL_VECTOR);
 	}
 	
 	return Plugin_Handled;
