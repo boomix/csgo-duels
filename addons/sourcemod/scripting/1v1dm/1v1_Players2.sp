@@ -154,7 +154,7 @@ void TeleportToLobby(int client, bool searchEnable, bool ImSearching = false)
 			
 			float org[3], ang[3];
 			GetArenaSpawn(LOBBY, GetClientTeam(client), org, ang);
-			TeleportEntity(client, org, ang, NULL_VECTOR);
+			TeleportEntitySafe(client, org, ang, NULL_VECTOR);
 			i_PlayerArena[client] 		= LOBBY;
 			i_PlayerEnemy[client] 		= -1;
 			
@@ -422,7 +422,7 @@ void TeleportToArena(int client, int team, int arena)
 {
 	float org[3], ang[3], vec[3];
 	GetArenaSpawn(arena, team, org, ang);
-	TeleportEntity(client, org, ang, vec);
+	TeleportEntitySafe(client, org, ang, vec);
 	SetEntData(client, g_offsCollisionGroup, 5, 4, true);
 	
 	//Remove lobby effect

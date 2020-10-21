@@ -14,6 +14,7 @@
 
 
 //File includes
+#include "1v1dm/1v1_AntiCheat.sp"
 #include "1v1dm/1v1_Globals.sp"
 #include "1v1dm/1v1_Functions.sp"
 #include "1v1dm/1v1_Configs.sp"
@@ -222,7 +223,7 @@ public Action CMD_Spawn(int client, int args)
 	
 	
 	GetArenaSpawn(StringToInt(arena), GetClientTeam(client), org, ang);
-	TeleportEntity(client, org, ang, NULL_VECTOR);
+	TeleportEntitySafe(client, org, ang, NULL_VECTOR);
 }
 
 public Action Event_OnPlayerTeam2(Handle event, const char[] name, bool dontBroadcast)
